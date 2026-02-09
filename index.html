@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Escola Bressol Petits Fishes (Bruc) - Diari</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background-color: #FFF9F0; 
+            overscroll-behavior-y: none; 
+            touch-action: pan-y; 
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* --- ANIMATIONS --- */
+        .slide-up { animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .pop-in { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .slide-in-right { animation: slideInRight 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideInRight { 
+            from { opacity: 0; transform: translateX(100px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+
+        .slide-in-left { animation: slideInLeft 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideInLeft { 
+            from { opacity: 0; transform: translateX(-100px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+
+        /* Idle Animation - Subtle Float */
+        .float-idle { animation: floatIdle 4s ease-in-out infinite; }
+        @keyframes floatIdle {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(2deg); }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFF9F0',
+                        pastel: {
+                            blue: '#A8D1E7',
+                            purple: '#CDC1FF',
+                            teal: '#9AE4CE',
+                            yellow: '#F9E0A2',
+                            orange: '#FFB7B2',
+                            text: '#3F4155'
+                        }
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        'blob': '30% 70% 70% 30% / 30% 30% 70% 70%' 
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-slate-700 min-h-screen pb-12 selection:bg-pastel-yellow relative overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="px-6 py-4 sticky top-0 z-20 transition-all bg-[#FFF9F0]/95 backdrop-blur-sm select-none">
+        <div class="max-w-md mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="flex flex-col">
+                    <h2 class="text-xs font-black tracking-widest text-slate-400 uppercase mb-0.5">Escola Bressol Petits</h2>
+                    <h1 class="text-2xl font-black text-pastel-text">Fishes Bruc</h1>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <!-- CALENDAR TOGGLE -->
+                    <button id="calendar-toggle-btn" class="w-12 h-12 bg-white hover:scale-105 text-slate-700 rounded-full shadow-sm flex items-center justify-center transition-all duration-300 cursor-pointer z-30">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div id="nav-controls" class="flex items-center justify-between mt-6 mb-2 transition-all duration-300">
+                <button id="prev-day-btn" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-white rounded-full transition-all duration-200 cursor-pointer transform">
+                    <i data-lucide="arrow-left" class="w-6 h-6"></i>
+                </button>
+
+                <div class="text-center flex flex-col items-center cursor-pointer group" onclick="toggleCalendar()">
+                    <span id="day-name-display" class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-pastel-orange transition-colors">DIVENDRES</span>
+                    <div class="relative">
+                        <span class="text-4xl font-black text-pastel-text leading-none">
+                            <span id="day-number-display">2</span>
+                        </span>
+                        <span class="absolute -top-1 -right-8 text-xs font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md uppercase" id="month-badge">GEN</span>
+                    </div>
+                </div>
+
+                <button id="next-day-btn" class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-white rounded-full transition-all duration-200 cursor-pointer transform">
+                    <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-md mx-auto px-5 pt-2 pb-10 min-h-[60vh]" id="main-container">
+        <!-- Content injected by JS -->
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // --- DATA DATABASE ---
+let CALENDAR_DB = {}; 
+
+async function loadCalendarData() {
+    try {
+        const response = await fetch('./calendar.csv');
+        const csvText = await response.text();
+        
+        // Convert CSV text to the Object structure the app expects
+        CALENDAR_DB = parseCSVtoCalendarDB(csvText);
+        
+        // Start the app
+        initializeApp();
+    } catch (error) {
+        console.error("Error loading CSV:", error);
+    }
+}
+
+// --- CSV PARSER ---
+function parseCSVtoCalendarDB(csvText) {
+    const db = {};
+    const lines = csvText.trim().split('\n');
+    
+    // Skip the header row (i=1)
+    for (let i = 1; i < lines.length; i++) {
+        // Handle potential carriage returns from Excel files
+        const row = lines[i].trim();
+        if (!row) continue;
+
+        // Split by comma (simple parser)
+        // If your text contains commas, we might need a stronger parser later
+        const [dateStr, type, label, activitiesStr, menuStr] = row.split(',');
+
+        // 1. Parse Date (YYYY-MM-DD)
+        const [year, monthNum, day] = dateStr.split('-').map(Number);
+        const monthIndex = monthNum - 1; // JS months are 0-11, CSV is 1-12
+
+        // 2. Ensure structure exists in DB
+        if (!db[year]) db[year] = {};
+        if (!db[year][monthIndex]) {
+            // We need a month name. Simple lookup:
+            const monthNames = ["GENER", "FEBRER", "MARÇ", "ABRIL", "MAIG", "JUNY", "JULIOL", "AGOST", "SETEMBRE", "OCTUBRE", "NOVEMBRE", "DESEMBRE"];
+            db[year][monthIndex] = { monthName: monthNames[monthIndex], days: {} };
+        }
+
+        // 3. Build the Day Object
+        const dayData = { type: type.trim() };
+
+        if (type.trim() === 'holiday') {
+            dayData.label = label ? label.trim() : '';
+        } else {
+            // For school days, parse the lists (separated by |)
+            if (label && label.trim()) dayData.special = label.trim();
+            dayData.activities = activitiesStr ? activitiesStr.split('|').map(s => s.trim()) : [];
+            dayData.menu = menuStr ? menuStr.split('|').map(s => s.trim()) : [];
+        }
+
+        // 4. Assign to DB
+        db[year][monthIndex].days[day] = dayData;
+    }
+    return db;
+};
+
+        const SONG_URL = ""; 
+        
+        const state = {
+            selectedDate: 2, 
+            isCalendarOpen: false,
+            month: 0, // Starts in Jan by default
+            year: 2026
+        };
+
+        // --- HELPERS ---
+        function getActiveData() {
+            return CALENDAR_DB[state.year][state.month];
+        }
+
+        function getDayNameInCatalan(day, month, year) {
+            const date = new Date(year, month, day);
+            const days = ['DIUMENGE', 'DILLUNS', 'DIMARTS', 'DIMECRES', 'DIJOUS', 'DIVENDRES', 'DISSABTE'];
+            return days[date.getDay()];
+        }
+        
+        function getShortDayName(index) {
+            const days = ['dl', 'dt', 'dc', 'dj', 'dv', 'ds', 'dg'];
+            return days[index];
+        }
+
+        function formatActivityText(text) {
+            if (text.toLowerCase().includes("cançó") && SONG_URL) {
+                return `
+                    <span class="flex flex-wrap items-center gap-1.5">
+                        ${text}
+                        <a href="${SONG_URL}" target="_blank" rel="noreferrer" 
+                           class="inline-flex items-center justify-center w-6 h-6 bg-white text-pastel-text rounded-full hover:scale-110 transition-transform shadow-sm">
+                            <i data-lucide="play" class="w-3 h-3 ml-0.5 fill-current"></i>
+                        </a>
+                    </span>
+                `;
+            }
+            return `<span>${text}</span>`;
+        }
+
+        // --- RENDERERS ---
+        function renderHeader() {
+            const activeData = getActiveData();
+            const dayNameEl = document.getElementById('day-name-display');
+            const dayNumEl = document.getElementById('day-number-display');
+            const monthBadge = document.getElementById('month-badge');
+            const navControls = document.getElementById('nav-controls');
+            const toggleBtn = document.getElementById('calendar-toggle-btn');
+            const prevBtn = document.getElementById('prev-day-btn');
+            const nextBtn = document.getElementById('next-day-btn');
+
+            toggleBtn.innerHTML = state.isCalendarOpen 
+                ? `<i data-lucide="x" class="w-6 h-6 text-slate-400"></i>`
+                : `<i data-lucide="calendar" class="w-6 h-6"></i>`;
+            
+            if (state.isCalendarOpen) {
+                navControls.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+            } else {
+                navControls.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+                dayNameEl.textContent = getDayNameInCatalan(state.selectedDate, state.month, state.year);
+                dayNumEl.textContent = state.selectedDate;
+                monthBadge.textContent = activeData.monthName.substring(0, 3);
+                
+                // Logic to enable/disable buttons based on total range (Jan 1 -> Feb 28)
+                // For simplicity, we just allow navigation if valid previous/next logic exists in goTo function
+                prevBtn.disabled = false; 
+                nextBtn.disabled = false;
+            }
+            lucide.createIcons(); 
+        }
+
+        function renderMainContent(direction = null) {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '';
+
+            if (state.isCalendarOpen) {
+                renderFullCalendar(container);
+            } else {
+                renderDailyView(container, direction);
+            }
+            lucide.createIcons();
+        }
+
+        function renderFullCalendar(container) {
+            const activeData = getActiveData();
+            const daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
+            const firstDayOffset = (new Date(state.year, state.month, 1).getDay() || 7) - 1; 
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === state.month && today.getFullYear() === state.year;
+
+            // Month Navigation in Grid
+            const prevMonthExists = CALENDAR_DB[state.year][state.month - 1];
+            const nextMonthExists = CALENDAR_DB[state.year][state.month + 1];
+
+            let html = `
+                <div class="pop-in select-none">
+                    <div class="flex items-center justify-between mb-6 mt-2 px-4">
+                        <button onclick="changeMonth(-1)" class="${prevMonthExists ? 'text-slate-400 hover:text-pastel-text' : 'text-slate-200 cursor-not-allowed'}">
+                            <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                        </button>
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">${activeData.monthName} ${state.year}</h2>
+                        <button onclick="changeMonth(1)" class="${nextMonthExists ? 'text-slate-400 hover:text-pastel-text' : 'text-slate-200 cursor-not-allowed'}">
+                            <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-7 mb-4">
+                        ${[0,1,2,3,4,5,6].map(i => 
+                            `<div class="text-center text-xs font-bold text-slate-300 uppercase py-2">${getShortDayName(i)}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="grid grid-cols-7 gap-y-3 gap-x-1">
+            `;
+
+            for (let i = 0; i < firstDayOffset; i++) html += `<div></div>`;
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const hasData = activeData.days[i];
+                const isToday = isCurrentMonth && today.getDate() === i;
+                const isSelected = state.selectedDate === i;
+                
+                // Default: Weekends / No Data
+                let bgClass = "bg-transparent text-slate-300"; 
+
+                if (isSelected) {
+                    bgClass = "bg-pastel-text text-white shadow-lg transform scale-110 z-10";
+                } else if (isToday) {
+                    bgClass = "bg-pastel-orange text-slate-800 font-bold";
+                } else if (hasData) {
+                    if (hasData.type === 'holiday') {
+                        // GREY FOR HOLIDAYS
+                        bgClass = "bg-slate-200 text-slate-400";
+                    } else {
+                        // SCHOOL DAYS
+                        bgClass = "bg-white text-slate-700 hover:bg-pastel-blue/30 shadow-sm";
+                    }
+                }
+
+                const dot = hasData && !isSelected && !isToday && hasData.type !== 'holiday' ? `<div class="w-1 h-1 bg-pastel-teal rounded-full mt-0.5"></div>` : '';
+
+                html += `
+                    <div class="flex justify-center">
+                        <button onclick="selectDate(${i})" class="w-10 h-10 rounded-full flex flex-col items-center justify-center text-sm font-bold transition-all duration-200 ${bgClass}">
+                            ${i}
+                            ${dot}
+                        </button>
+                    </div>
+                `;
+            }
+            html += `</div></div>`;
+
+            container.innerHTML = html;
+        }
+
+        function renderDailyView(container, direction) {
+            const activeData = getActiveData();
+            const dayData = activeData.days[state.selectedDate];
+            const today = new Date();
+            const isToday = today.getDate() === state.selectedDate && today.getMonth() === state.month && today.getFullYear() === state.year;
+
+            let animClass = "slide-up";
+            if (direction === 'next') animClass = "slide-in-right";
+            else if (direction === 'prev') animClass = "slide-in-left";
+
+            let html = `<div class="${animClass} flex flex-col gap-4">`;
+
+            if (dayData) {
+                if (isToday) {
+                    html += `
+                        <div class="flex justify-center -mt-2 mb-1">
+                            <span class="text-[10px] font-black bg-pastel-text text-white px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">Avui</span>
+                        </div>
+                    `;
+                }
+
+                if (dayData.special) {
+                    html += `
+                        <div class="bg-pastel-yellow p-4 rounded-[24px] relative overflow-hidden group flex items-center gap-4 shadow-sm">
+                            <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/30 rounded-full blur-xl"></div>
+                            <div class="w-10 h-10 bg-white/50 rounded-full flex items-center justify-center shadow-sm shrink-0 relative z-10">
+                                <i data-lucide="gift" class="w-5 h-5 text-amber-600"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-700 text-base leading-tight relative z-10">${dayData.special}</h3>
+                        </div>
+                    `;
+                }
+
+                if (dayData.type === 'holiday') {
+                    html += `
+                        <div class="bg-slate-200 p-8 rounded-[32px] flex flex-col items-center justify-center text-center min-h-[300px] relative overflow-hidden shadow-sm">
+                            <div class="absolute w-40 h-40 bg-white/20 rounded-full -top-10 -left-10"></div>
+                            <i data-lucide="smile" class="w-16 h-16 text-slate-400 mb-4 relative z-10"></i>
+                            <h3 class="text-xl font-bold text-slate-600 mb-2 relative z-10">${dayData.label}</h3>
+                            <p class="text-slate-500 font-medium relative z-10">Gaudiu del dia lliure!</p>
+                        </div>
+                    `;
+                } else {
+                    // MENU CARD
+                    html += `
+                        <div class="bg-pastel-teal p-6 rounded-[32px] relative overflow-hidden min-h-[220px] group flex flex-col shadow-sm">
+                             <!-- Wrapper for Hover Transition (Subtle Move Up) -->
+                             <div class="absolute -bottom-12 -right-4 w-40 h-40 transition-transform duration-500 ease-out group-hover:-translate-y-6 pointer-events-none">
+                                <!-- Inner for Idle Animation -->
+                                <div class="w-full h-full opacity-90 float-idle">
+                                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M40 200C40 120 80 40 150 40C180 40 195 60 200 80V200H40Z" fill="#F9E0A2"/>
+                                        <circle cx="110" cy="100" r="8" fill="#3F4155"/>
+                                        <circle cx="150" cy="95" r="8" fill="#3F4155"/>
+                                        <path d="M120 130C130 140 140 140 150 130" stroke="#3F4155" stroke-width="6" stroke-linecap="round"/>
+                                        <circle cx="105" cy="115" r="6" fill="#FFB7B2" opacity="0.6"/>
+                                        <circle cx="160" cy="110" r="6" fill="#FFB7B2" opacity="0.6"/>
+                                    </svg>
+                                </div>
+                             </div>
+                            <div class="flex items-center gap-3 mb-4 relative z-10">
+                                <div class="w-10 h-10 bg-white/40 rounded-full flex items-center justify-center">
+                                    <i data-lucide="utensils" class="w-5 h-5 text-teal-800"></i>
+                                </div>
+                                <h3 class="font-black text-teal-900 text-lg">Menú</h3>
+                            </div>
+                            <ul class="space-y-4 relative z-10 pl-1 pr-24 flex-1">
+                                ${dayData.menu.map((item, idx) => `
+                                    <li class="flex items-center gap-3 text-teal-900 font-bold text-sm leading-snug">
+                                        <span class="w-8 h-8 flex items-center justify-center bg-white/30 rounded-full text-xs font-black shrink-0">${idx + 1}</span>
+                                        <span>${item}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+
+                    // ACTIVITIES CARD
+                    html += `
+                        <div class="bg-pastel-purple p-6 rounded-[32px] relative overflow-hidden min-h-[220px] group flex flex-col shadow-sm">
+                             <!-- Wrapper for Hover Transition (Subtle Move Down) -->
+                             <div class="absolute -top-8 -right-8 w-44 h-44 transition-transform duration-500 ease-out group-hover:translate-y-6 pointer-events-none">
+                                <!-- Inner for Idle Animation -->
+                                <div class="w-full h-full float-idle">
+                                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="opacity-90">
+                                        <path d="M50 0C20 0 0 30 0 80C0 150 40 180 100 180C160 180 200 150 200 80V0H50Z" fill="#9AE4CE"/>
+                                        <ellipse cx="70" cy="80" rx="8" ry="12" fill="#3F4155"/>
+                                        <ellipse cx="120" cy="80" rx="8" ry="12" fill="#3F4155"/>
+                                        <circle cx="95" cy="110" r="8" fill="#3F4155"/>
+                                    </svg>
+                                </div>
+                             </div>
+                            <div class="flex items-center gap-3 mb-4 relative z-10">
+                                <div class="w-10 h-10 bg-white/40 rounded-full flex items-center justify-center">
+                                    <i data-lucide="music" class="w-5 h-5 text-indigo-900"></i>
+                                </div>
+                                <h3 class="font-black text-indigo-900 text-lg">Activitats</h3>
+                            </div>
+                            <ul class="space-y-4 relative z-10 pl-1 pr-16 flex-1">
+                                ${dayData.activities.map((act, idx) => `
+                                    <li class="flex items-center gap-3 text-indigo-900 font-bold text-sm">
+                                        <span class="w-8 h-8 flex items-center justify-center bg-white/30 rounded-full text-xs font-black shrink-0">${idx + 1}</span>
+                                        ${formatActivityText(act)}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            } else {
+                // Weekend
+                html += `
+                    <div class="bg-pastel-blue/20 p-8 rounded-[32px] flex flex-col items-center justify-center text-center min-h-[300px] shadow-sm">
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm">
+                            <i data-lucide="palmtree" class="w-8 h-8 text-pastel-blue"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-600 mb-1">Cap de setmana</h3>
+                        <p class="text-slate-400 font-medium">Relaxa't i gaudeix!</p>
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        // --- ACTIONS ---
+        function selectDate(day) {
+            const activeData = getActiveData();
+            if (activeData.days[day]) {
+                state.selectedDate = day;
+                state.isCalendarOpen = false;
+                renderHeader();
+                renderMainContent(); 
+            }
+        }
+
+        function toggleCalendar() {
+            state.isCalendarOpen = !state.isCalendarOpen;
+            renderHeader();
+            renderMainContent();
+        }
+
+        function changeMonth(delta) {
+            const newMonth = state.month + delta;
+            if (CALENDAR_DB[state.year][newMonth]) {
+                state.month = newMonth;
+                // If moving month in Calendar view, we usually keep it open
+                // Reset selectedDate to 1 or stay? Let's reset to 1
+                state.selectedDate = 1; 
+                renderHeader();
+                renderMainContent();
+            }
+        }
+        
+        document.getElementById('calendar-toggle-btn').addEventListener('click', toggleCalendar);
+
+        function goToPreviousDay() {
+            if (state.selectedDate > 1) {
+                state.selectedDate--;
+                renderHeader();
+                renderMainContent('prev');
+            } else {
+                // Try previous month
+                const prevMonth = state.month - 1;
+                if (CALENDAR_DB[state.year][prevMonth]) {
+                    state.month = prevMonth;
+                    state.selectedDate = new Date(state.year, prevMonth + 1, 0).getDate();
+                    renderHeader();
+                    renderMainContent('prev');
+                }
+            }
+        }
+
+        function goToNextDay() {
+            const lastDay = new Date(state.year, state.month + 1, 0).getDate();
+            if (state.selectedDate < lastDay) {
+                state.selectedDate++;
+                renderHeader();
+                renderMainContent('next');
+            } else {
+                // Try next month
+                const nextMonth = state.month + 1;
+                if (CALENDAR_DB[state.year][nextMonth]) {
+                    state.month = nextMonth;
+                    state.selectedDate = 1;
+                    renderHeader();
+                    renderMainContent('next');
+                }
+            }
+        }
+
+        document.getElementById('prev-day-btn').addEventListener('click', goToPreviousDay);
+        document.getElementById('next-day-btn').addEventListener('click', goToNextDay);
+
+        // --- TOUCH GESTURES (SWIPE) ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const prevBtn = document.getElementById('prev-day-btn');
+        const nextBtn = document.getElementById('next-day-btn');
+
+        function highlightArrow(direction) {
+            prevBtn.classList.remove('bg-rose-100', 'text-rose-500', 'scale-125');
+            nextBtn.classList.remove('bg-rose-100', 'text-rose-500', 'scale-125');
+            if (direction === 'prev') prevBtn.classList.add('bg-rose-100', 'text-rose-500', 'scale-125');
+            else if (direction === 'next') nextBtn.classList.add('bg-rose-100', 'text-rose-500', 'scale-125');
+        }
+
+        function resetArrows() {
+            prevBtn.classList.remove('bg-rose-100', 'text-rose-500', 'scale-125');
+            nextBtn.classList.remove('bg-rose-100', 'text-rose-500', 'scale-125');
+        }
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', e => {
+            if (state.isCalendarOpen) return;
+            const touchCurrentX = e.changedTouches[0].screenX;
+            const touchCurrentY = e.changedTouches[0].screenY;
+            const diffX = touchCurrentX - touchStartX;
+            const diffY = touchCurrentY - touchStartY;
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 15) {
+                 if (diffX > 0) highlightArrow('prev');
+                 else highlightArrow('next');
+            } else {
+                resetArrows();
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            if (state.isCalendarOpen) return;
+            resetArrows();
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) goToPreviousDay();
+                else goToNextDay();
+            }
+        }, { passive: true });
+
+
+        // Logic to run ONLY after data is loaded
+function initializeApp() {
+    const today = new Date();
+    
+    // Check if real world time matches our DB
+    // We use safe checks (?.) in case data is missing
+    if (today.getFullYear() === state.year && CALENDAR_DB[state.year]?.[today.getMonth()]) {
+        state.month = today.getMonth();
+        state.selectedDate = today.getDate();
+    } else {
+        // Default fallback
+        state.selectedDate = 2;
+        state.month = 0;
+    }
+    
+    renderHeader();
+    renderMainContent();
+}
+
+// Start the app
+document.addEventListener('DOMContentLoaded', () => {
+    loadCalendarData();
+});
+    </script>
+</body>
+</html>
