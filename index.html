@@ -155,8 +155,37 @@ async function loadCalendarData() {
 
 // --- CSV PARSER ---
 function parseCSVtoCalendarDB(csvText) {
+    const monthNames = ["GENER", "FEBRER", "MARÇ", "ABRIL", "MAIG", "JUNY", "JULIOL", "AGOST", "SETEMBRE", "OCTUBRE", "NOVEMBRE", "DESEMBRE"];
     const db = {};
     const lines = csvText.trim().split('\n');
+
+    const parseCSVRow = (row) => {
+        const values = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < row.length; i++) {
+            const char = row[i];
+            const nextChar = row[i + 1];
+
+            if (char === '"') {
+                if (inQuotes && nextChar === '"') {
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+
+        values.push(current.trim());
+        return values;
+    };
     
     // Skip the header row (i=1)
     for (let i = 1; i < lines.length; i++) {
@@ -164,9 +193,8 @@ function parseCSVtoCalendarDB(csvText) {
         const row = lines[i].trim();
         if (!row) continue;
 
-        // Split by comma (simple parser)
-        // If your text contains commas, we might need a stronger parser later
-        const [dateStr, type, label, activitiesStr, menuStr] = row.split(',');
+        const [dateStr, type, label, activitiesStr, menuStr] = parseCSVRow(row);
+        if (!dateStr || !type) continue;
 
         // 1. Parse Date (YYYY-MM-DD)
         const [year, monthNum, day] = dateStr.split('-').map(Number);
@@ -174,11 +202,7 @@ function parseCSVtoCalendarDB(csvText) {
 
         // 2. Ensure structure exists in DB
         if (!db[year]) db[year] = {};
-        if (!db[year][monthIndex]) {
-            // We need a month name. Simple lookup:
-            const monthNames = ["GENER", "FEBRER", "MARÇ", "ABRIL", "MAIG", "JUNY", "JULIOL", "AGOST", "SETEMBRE", "OCTUBRE", "NOVEMBRE", "DESEMBRE"];
-            db[year][monthIndex] = { monthName: monthNames[monthIndex], days: {} };
-        }
+        if (!db[year][monthIndex]) db[year][monthIndex] = { monthName: monthNames[monthIndex], days: {} };
 
         // 3. Build the Day Object
         const dayData = { type: type.trim() };
@@ -210,6 +234,19 @@ function parseCSVtoCalendarDB(csvText) {
         // --- HELPERS ---
         function getActiveData() {
             return CALENDAR_DB[state.year][state.month];
+        }
+
+        function getAvailableYearMonthPairs() {
+            return Object.entries(CALENDAR_DB)
+                .flatMap(([year, months]) => Object.keys(months).map(month => ({ year: Number(year), month: Number(month) })))
+                .sort((a, b) => (a.year - b.year) || (a.month - b.month));
+        }
+
+        function getAdjacentMonth(delta) {
+            const months = getAvailableYearMonthPairs();
+            const currentIndex = months.findIndex(({ year, month }) => year === state.year && month === state.month);
+            if (currentIndex === -1) return null;
+            return months[currentIndex + delta] || null;
         }
 
         function getDayNameInCatalan(day, month, year) {
@@ -289,8 +326,8 @@ function parseCSVtoCalendarDB(csvText) {
             const isCurrentMonth = today.getMonth() === state.month && today.getFullYear() === state.year;
 
             // Month Navigation in Grid
-            const prevMonthExists = CALENDAR_DB[state.year][state.month - 1];
-            const nextMonthExists = CALENDAR_DB[state.year][state.month + 1];
+            const prevMonthExists = !!getAdjacentMonth(-1);
+            const nextMonthExists = !!getAdjacentMonth(1);
 
             let html = `
                 <div class="pop-in select-none">
@@ -495,9 +532,10 @@ function parseCSVtoCalendarDB(csvText) {
         }
 
         function changeMonth(delta) {
-            const newMonth = state.month + delta;
-            if (CALENDAR_DB[state.year][newMonth]) {
-                state.month = newMonth;
+            const adjacentMonth = getAdjacentMonth(delta);
+            if (adjacentMonth) {
+                state.year = adjacentMonth.year;
+                state.month = adjacentMonth.month;
                 // If moving month in Calendar view, we usually keep it open
                 // Reset selectedDate to 1 or stay? Let's reset to 1
                 state.selectedDate = 1; 
@@ -515,10 +553,11 @@ function parseCSVtoCalendarDB(csvText) {
                 renderMainContent('prev');
             } else {
                 // Try previous month
-                const prevMonth = state.month - 1;
-                if (CALENDAR_DB[state.year][prevMonth]) {
-                    state.month = prevMonth;
-                    state.selectedDate = new Date(state.year, prevMonth + 1, 0).getDate();
+                const prevMonth = getAdjacentMonth(-1);
+                if (prevMonth) {
+                    state.year = prevMonth.year;
+                    state.month = prevMonth.month;
+                    state.selectedDate = new Date(state.year, state.month + 1, 0).getDate();
                     renderHeader();
                     renderMainContent('prev');
                 }
@@ -533,9 +572,10 @@ function parseCSVtoCalendarDB(csvText) {
                 renderMainContent('next');
             } else {
                 // Try next month
-                const nextMonth = state.month + 1;
-                if (CALENDAR_DB[state.year][nextMonth]) {
-                    state.month = nextMonth;
+                const nextMonth = getAdjacentMonth(1);
+                if (nextMonth) {
+                    state.year = nextMonth.year;
+                    state.month = nextMonth.month;
                     state.selectedDate = 1;
                     renderHeader();
                     renderMainContent('next');
@@ -599,17 +639,23 @@ function parseCSVtoCalendarDB(csvText) {
 
         // Logic to run ONLY after data is loaded
 function initializeApp() {
+    const availableMonths = getAvailableYearMonthPairs();
+    if (!availableMonths.length) return;
+
     const today = new Date();
+    const todayMonthExists = CALENDAR_DB[today.getFullYear()]?.[today.getMonth()];
     
-    // Check if real world time matches our DB
-    // We use safe checks (?.) in case data is missing
-    if (today.getFullYear() === state.year && CALENDAR_DB[state.year]?.[today.getMonth()]) {
+    // If today's month exists in the CSV, start there.
+    if (todayMonthExists) {
+        state.year = today.getFullYear();
         state.month = today.getMonth();
         state.selectedDate = today.getDate();
     } else {
-        // Default fallback
-        state.selectedDate = 2;
-        state.month = 0;
+        // Otherwise start in the first available month from the CSV.
+        const firstAvailable = availableMonths[0];
+        state.year = firstAvailable.year;
+        state.month = firstAvailable.month;
+        state.selectedDate = 1;
     }
     
     renderHeader();
@@ -624,5 +670,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 
 </html>
-
 
