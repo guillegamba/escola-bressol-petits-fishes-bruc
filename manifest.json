@@ -1,0 +1,20 @@
+{
+  "name": "Escola Bressol Petits Fishes (Bruc) - Diari",
+  "short_name": "Fishes Bruc",
+  "description": "Diari diari amb activitats i menú de l'Escola Bressol Petits Fishes (Bruc).",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF9F0",
+  "theme_color": "#FFF9F0",
+  "lang": "ca",
+  "icons": [
+    {
+      "src": "./favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
