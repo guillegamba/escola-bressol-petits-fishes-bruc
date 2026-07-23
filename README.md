@@ -1,57 +1,57 @@
 # 🐟 Escola Bressol Petits Fishes (Bruc) — Diari
 
-An unofficial, mobile-first daily diary for the **Escola Bressol Petits Fishes (Bruc)** nursery school. It shows, for each school day, the day's **menu** and **activities**, plus a monthly calendar to jump between days. The whole thing is a single-page Progressive Web App (PWA) that works offline and can be installed to a phone's home screen.
+Un diari diari, no oficial i pensat per al mòbil, de l'**Escola Bressol Petits Fishes (Bruc)**. Mostra, per a cada dia lectiu, el **menú** i les **activitats** del dia, amb un calendari mensual per saltar entre dies. Tot plegat és una aplicació web d'una sola pàgina (PWA) que funciona sense connexió i es pot instal·lar a la pantalla d'inici del telèfon.
 
-The interface is entirely in **Catalan**, matching the school's language.
+La interfície és íntegrament en **català**, com la de l'escola.
 
-> ⚠️ **No oficial** — this is a personal project and may contain errors. It is not affiliated with or endorsed by the school.
-
----
-
-## ✨ Features
-
-- **📅 Daily view** — for each day, a menu card and an activities card, with playful pastel illustrations.
-- **🗓️ Monthly calendar** — tap the calendar icon (or the date) to open a month grid. School days, holidays, today, and the selected day are all styled distinctly.
-- **⬅️➡️ Navigation** — move day by day with the arrow buttons, **swipe** left/right on touch devices, or jump straight to **"Avui"** (today). Navigation rolls over between months and gives a subtle rubber-band bounce at the first/last available day.
-- **🎉 Special days** — birthdays, themed days and celebrations get a highlighted banner (e.g. *Aniversari*, *Dia de la Pau*, *Carnestoltes*).
-- **🏖️ Holidays & weekends** — non-school days show a friendly "day off" / "weekend" card instead of a menu.
-- **🎵 Song links** — activities that mention a *cançó* (song) can show a ▶ play button linking to the month's project/body song (YouTube, Spotify, etc.).
-- **📲 Installable PWA** — add to home screen, launches standalone in portrait, and works **offline** via a service worker.
-- **📊 Analytics** — Vercel Web Analytics is wired in for basic usage insight.
+> ⚠️ **No oficial** — és un projecte personal i pot contenir errors. No està afiliat ni avalat per l'escola.
 
 ---
 
-## 🗂️ Project structure
+## ✨ Funcionalitats
 
-| File | Purpose |
+- **📅 Vista diària** — per a cada dia, una targeta de menú i una d'activitats, amb il·lustracions de tons pastel.
+- **🗓️ Calendari mensual** — toca la icona del calendari (o la data) per obrir la graella del mes. Els dies lectius, els festius, el dia d'avui i el dia seleccionat es distingeixen amb estils diferents.
+- **⬅️➡️ Navegació** — mou-te dia a dia amb les fletxes, **llisca** cap a l'esquerra/dreta a les pantalles tàctils, o vés directament a **«Avui»**. La navegació salta entre mesos i fa un petit rebot elàstic quan arribes al primer o l'últim dia disponible.
+- **🎉 Dies especials** — aniversaris, dies temàtics i celebracions es mostren amb un rètol destacat (p. ex. *Aniversari*, *Dia de la Pau*, *Carnestoltes*).
+- **🏖️ Festius i caps de setmana** — els dies no lectius mostren una targeta de «dia lliure» / «cap de setmana» en lloc del menú.
+- **🎵 Enllaços de cançons** — les activitats que esmenten una *cançó* poden mostrar un botó ▶ que enllaça amb la cançó del projecte/del cos del mes (YouTube, Spotify, etc.).
+- **📲 PWA instal·lable** — s'afegeix a la pantalla d'inici, s'obre en mode estàndard i vertical, i funciona **sense connexió** gràcies a un service worker.
+- **📊 Analítica** — hi ha integrat Vercel Web Analytics per tenir una idea bàsica de l'ús.
+
+---
+
+## 🗂️ Estructura del projecte
+
+| Fitxer | Funció |
 | --- | --- |
-| `index.html` | The entire app — markup, styles, and all JavaScript logic live here (self-contained). |
-| `calendar.csv` | The data source: one row per day with type, label, activities, and menu. **This is what you edit to update the diary.** |
-| `manifest.json` | PWA manifest (name, icons, theme colors, standalone display). |
-| `sw.js` | Service worker — stale-while-revalidate caching for offline support. |
-| `favicon.png` | App icon / favicon / Apple touch icon. |
-| `package.json` | Dev dependency (`servor`) and the `start` script for local serving. |
-| `styles.css`, `script.js` | Leftover starter-template files. **Not used** by `index.html` — safe to ignore. |
+| `index.html` | Tota l'aplicació — marcatge, estils i tota la lògica de JavaScript hi són a dins (autònom). |
+| `calendar.csv` | La font de dades: una fila per dia amb el tipus, l'etiqueta, les activitats i el menú. **És el que edites per actualitzar el diari.** |
+| `manifest.json` | Manifest de la PWA (nom, icones, colors del tema, visualització estàndard). |
+| `sw.js` | Service worker — memòria cau *stale-while-revalidate* per funcionar sense connexió. |
+| `favicon.png` | Icona de l'app / favicon / icona per a Apple. |
+| `package.json` | Dependència de desenvolupament (`servor`) i l'script `start` per servir l'app en local. |
+| `styles.css`, `script.js` | Fitxers sobrants de la plantilla inicial. **No s'utilitzen** a `index.html` — es poden ignorar. |
 
 ---
 
-## 📄 The data format (`calendar.csv`)
+## 📄 El format de dades (`calendar.csv`)
 
-All content is driven by `calendar.csv`. The header row is:
+Tot el contingut prové de `calendar.csv`. La fila de capçalera és:
 
 ```csv
 Date,Type,Label,Activities,Menu
 ```
 
-| Column | Meaning |
+| Columna | Significat |
 | --- | --- |
-| `Date` | Day in `YYYY-MM-DD` format. |
-| `Type` | Either `school` or `holiday`. |
-| `Label` | For `holiday`: the holiday name (e.g. `Dia de Reis 👑`). For `school`: an optional **special-day** banner (e.g. `Aniversari Bruno 🎂`); leave empty for a normal day. |
-| `Activities` | For `school` days: a list of activities separated by `\|` (pipe). Ignored for holidays. |
-| `Menu` | For `school` days: the menu courses separated by `\|` (pipe). Ignored for holidays. |
+| `Date` | Dia en format `AAAA-MM-DD`. |
+| `Type` | `school` (lectiu) o `holiday` (festiu). |
+| `Label` | Per a `holiday`: el nom del festiu (p. ex. `Dia de Reis 👑`). Per a `school`: un rètol opcional de **dia especial** (p. ex. `Aniversari Bruno 🎂`); deixa'l buit per a un dia normal. |
+| `Activities` | Per als dies `school`: una llista d'activitats separades per `\|` (barra vertical). S'ignora en els festius. |
+| `Menu` | Per als dies `school`: els plats del menú separats per `\|` (barra vertical). S'ignora en els festius. |
 
-Examples:
+Exemples:
 
 ```csv
 2026-01-06,holiday,Dia de Reis 👑,,
@@ -60,13 +60,13 @@ Examples:
 ```
 
 Notes:
-- **Weekends** are simply omitted — any date without a row renders as a "Cap de setmana" (weekend) card.
-- Fields containing commas can be wrapped in double quotes (standard CSV quoting is supported by the parser).
-- The app derives available months automatically from the dates present in the file. The current data covers **January–June 2026**.
+- Els **caps de setmana** simplement s'ometen — qualsevol data sense fila es mostra com una targeta de «Cap de setmana».
+- Els camps que contenen comes es poden envoltar amb cometes dobles (l'analitzador admet el format CSV estàndard amb cometes).
+- L'app dedueix automàticament els mesos disponibles a partir de les dates presents al fitxer. Les dades actuals cobreixen de **gener a juny de 2026**.
 
-### Song links per month
+### Cançons per mes
 
-Songs are configured separately, inline in `index.html`, in the `SONGS_BY_MONTH` object keyed by `"YYYY-MM"`:
+Les cançons es configuren a part, dins de `index.html`, a l'objecte `SONGS_BY_MONTH` amb la clau `"AAAA-MM"`:
 
 ```js
 const SONGS_BY_MONTH = {
@@ -74,52 +74,52 @@ const SONGS_BY_MONTH = {
 };
 ```
 
-When a month has a URL, any activity text containing *"cançó"* gets a ▶ play button linking to it.
+Quan un mes té un URL, qualsevol activitat que contingui el text *«cançó»* mostra un botó ▶ que hi enllaça.
 
 ---
 
-## 🚀 Running locally
+## 🚀 Executar en local
 
-The app is fully static — any static file server works. Because it loads `calendar.csv` via `fetch()`, you must serve it over HTTP (opening `index.html` directly from the filesystem won't work).
+L'app és totalment estàtica — funciona amb qualsevol servidor de fitxers estàtics. Com que carrega `calendar.csv` amb `fetch()`, cal servir-la per HTTP (obrir `index.html` directament des del sistema de fitxers no funcionarà).
 
-**Option A — use the bundled script:**
+**Opció A — fes servir l'script inclòs:**
 
 ```bash
 npm install
-npm start        # runs `servor --reload` with live reload
+npm start        # executa `servor --reload` amb recàrrega en viu
 ```
 
-**Option B — any static server:**
+**Opció B — qualsevol servidor estàtic:**
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000
+# després obre http://localhost:8000
 ```
 
 ---
 
-## 🛠️ Tech stack
+## 🛠️ Tecnologies
 
-- **Vanilla HTML / CSS / JavaScript** — no build step, no framework.
-- **[Tailwind CSS](https://tailwindcss.com/)** via CDN, with a small custom theme (cream background, pastel palette, blob radii).
-- **[Lucide Icons](https://lucide.dev/)** for the UI icons.
+- **HTML / CSS / JavaScript nadiu** — sense pas de compilació ni cap framework.
+- **[Tailwind CSS](https://tailwindcss.com/)** via CDN, amb un tema personalitzat (fons crema, paleta pastel, radis tipus *blob*).
+- **[Lucide Icons](https://lucide.dev/)** per a les icones de la interfície.
 - **[Nunito](https://fonts.google.com/specimen/Nunito)** via Google Fonts.
-- **Service Worker + Web App Manifest** for PWA / offline behaviour.
-- **[servor](https://www.npmjs.com/package/servor)** for local development.
+- **Service Worker + Web App Manifest** per al comportament PWA / sense connexió.
+- **[servor](https://www.npmjs.com/package/servor)** per al desenvolupament local.
 - **Vercel Web Analytics.**
 
 ---
 
-## ✏️ Updating the diary
+## ✏️ Actualitzar el diari
 
-1. Edit `calendar.csv` — add or change rows for the relevant dates.
-2. (Optional) Add a song for a month in `SONGS_BY_MONTH` inside `index.html`.
-3. Commit and deploy. On next load the service worker refreshes the cached data.
+1. Edita `calendar.csv` — afegeix o modifica les files dels dies corresponents.
+2. (Opcional) Afegeix una cançó per a un mes a `SONGS_BY_MONTH` dins de `index.html`.
+3. Fes *commit* i desplega. A la propera càrrega, el service worker refresca les dades en memòria cau.
 
-> If you change cached core assets, bump the `CACHE` version in `sw.js` (e.g. `fishes-v1` → `fishes-v2`) so clients pick up the update.
+> Si canvies els recursos bàsics de la memòria cau, incrementa la versió de `CACHE` a `sw.js` (p. ex. `fishes-v1` → `fishes-v2`) perquè els clients rebin l'actualització.
 
 ---
 
-## 🌍 Deployment
+## 🌍 Desplegament
 
-Any static host works (GitHub Pages, Netlify, etc.). The service worker and manifest use relative paths (`./`), so the app can be served from a subpath. The presence of the Vercel Analytics snippet and `/_vercel/insights/script.js` suggests deployment on **Vercel**.
+Funciona en qualsevol allotjament estàtic (GitHub Pages, Netlify, etc.). El service worker i el manifest fan servir rutes relatives (`./`), de manera que l'app es pot servir des d'un subdirectori. La presència del fragment de Vercel Analytics i de `/_vercel/insights/script.js` suggereix un desplegament a **Vercel**.
