@@ -1,7 +1,7 @@
 {
-  "name": "Escola Bressol Petits Fishes (Bruc) - Diari",
-  "short_name": "Fishes Bruc",
-  "description": "Menú, activitats i calendari. Diari no oficial per a les famílies de Fishes Bruc.",
+  "name": "Escola Bressol Petits Giraffes (Bruc) - Diari",
+  "short_name": "Giraffes Bruc",
+  "description": "Menú, activitats i calendari. Diari no oficial per a les famílies de Giraffes Bruc.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

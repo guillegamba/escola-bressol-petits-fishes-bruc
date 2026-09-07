@@ -1,6 +1,6 @@
 /* Bump the shell version whenever HTML, CSS, JS or bundled assets change. */
 importScripts("./data.js");
-const CACHE = "fishes-v3";
+const CACHE = "giraffes-v2";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -31,7 +31,11 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key.startsWith("fishes-") && key !== CACHE)
+            .filter(
+              (key) =>
+                (key.startsWith("giraffes-") || key.startsWith("fishes-")) &&
+                key !== CACHE,
+            )
             .map((key) => caches.delete(key)),
         ),
       )

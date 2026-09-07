@@ -31,15 +31,17 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     await page.locator("#date-title").textContent(),
     /6 de setembre/,
   );
-  assert.match(
-    await page.locator("#schedule-status").textContent(),
-    /setembre del 2026/,
-  );
   await page.locator("#next-day-btn").click();
+  await page.locator(".menu-card").waitFor();
   assert.match(
-    await page.locator(".empty-day").textContent(),
-    /Encara no hi ha menú/,
+    await page.locator(".menu-card").textContent(),
+    /Patata estofada amb verdures/,
   );
+  assert.match(
+    await page.locator(".special-day").textContent(),
+    /Inici de curs/,
+  );
+  assert.equal(await page.locator("#schedule-status").textContent(), "");
   await page.locator("#weekly-btn").click();
   assert.equal(await page.locator(".week-row").count(), 7);
   assert.equal(
@@ -47,7 +49,14 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .locator(".week-row")
       .filter({ hasText: "Programació pendent" })
       .count(),
-    5,
+    0,
+  );
+  assert.equal(
+    await page
+      .locator(".week-row")
+      .filter({ hasText: "Diada Nacional de Catalunya" })
+      .count(),
+    1,
   );
   await page.locator('[data-week-date="2026-09-07"]').click();
   assert.equal(
@@ -73,11 +82,29 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     await page.evaluate(() => document.activeElement.id),
     "calendar-toggle-btn",
   );
+  // November holds course-calendar rows (a closure, a free-disposition day) but
+  // no programme, so the month still reads as pending.
+  await page.goto(base + "?date=2026-11-10&view=week");
+  await page.locator("#schedule-status .schedule-notice").waitFor();
+  assert.match(
+    await page.locator("#schedule-status").textContent(),
+    /novembre del 2026/,
+  );
+  assert.equal(
+    await page
+      .locator(".week-row")
+      .filter({ hasText: "Programació pendent" })
+      .count(),
+    5,
+  );
   await page.locator('[data-action="archive"]').click();
-  assert.match(await page.locator("#date-title").textContent(), /31 de juliol/);
+  assert.match(
+    await page.locator("#date-title").textContent(),
+    /30 de setembre/,
+  );
   assert.match(
     await page.locator(".menu-card").textContent(),
-    /Arròs a la cubana/,
+    /Estofat de mongetes blanques/,
   );
   assert.equal(await page.locator("#bag-content").isVisible(), false);
   assert.equal(await page.locator("#checklist").textContent(), "");
@@ -217,7 +244,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     .waitFor();
   assert.equal(errors.length, 0, JSON.stringify(errors));
   console.log(
-    "PASS: current date; unpublished weekdays; week view; archive; modal keyboard/focus; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
+    "PASS: current date; published September; pending month with calendar-only rows; week view; archive; modal keyboard/focus; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
   );
   await context.close();
   // Real service worker: cache installation, immediate fresh data, offline shared URLs.
