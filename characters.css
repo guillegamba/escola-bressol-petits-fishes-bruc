@@ -52,38 +52,42 @@
   font-weight: 800;
   margin-bottom: 6px;
 }
+.day-cards {
+  gap: 28px;
+}
 .diary-card {
-  padding: 24px;
-  min-height: 330px;
+  padding: 24px 24px 184px;
+  min-height: 420px;
+  overflow: visible;
 }
 .menu-card {
-  background: #f1e7c9;
+  background: #eee4d5;
 }
 .activities-card.personality-sporty {
-  background: #e2eade;
-  color: #244a33;
+  background: #e6e9de;
+  color: #344b39;
 }
 .activities-card.personality-swimmer {
-  background: #e0eaec;
-  color: #254d5a;
+  background: #e3ebeb;
+  color: #34515a;
 }
 .activities-card.personality-artist {
-  background: #ece0e9;
-  color: #633e57;
+  background: #eee3e5;
+  color: #624652;
 }
 :root[data-theme="dark"] .menu-card {
-  background: #463d27;
+  background: #463d32;
 }
 :root[data-theme="dark"] .activities-card.personality-sporty {
-  background: #294334;
+  background: #303e32;
   color: #e4f1df;
 }
 :root[data-theme="dark"] .activities-card.personality-swimmer {
-  background: #29424a;
+  background: #2c4148;
   color: #e1eff3;
 }
 :root[data-theme="dark"] .activities-card.personality-artist {
-  background: #45323f;
+  background: #45363e;
   color: #f3dce9;
 }
 .card-heading {
@@ -93,37 +97,58 @@
 .meal-list,
 .activity-list {
   position: relative;
-  padding-right: 145px;
+  padding-right: 0;
 }
 .meal-text,
 .activity-list li {
   overflow-wrap: anywhere;
 }
+/* The illustration window reaches 10px beyond the card. Its lower crop stays
+   independent of the text column and contains every animated pose. */
 .card-mascot {
   position: absolute;
   display: block;
-  right: -98px;
-  bottom: -86px;
-  width: 280px;
-  height: 280px;
+  right: -10px;
+  bottom: -10px;
+  width: calc(100% + 10px);
+  height: 178px;
+  overflow: hidden;
+  border-radius: 0 0 28px 24px;
   pointer-events: none;
   isolation: isolate;
 }
 .card-mascot > svg {
+  position: absolute;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 320px;
+  height: 320px;
+  right: -46px;
+  top: 6px;
   overflow: visible;
   stroke-width: initial;
 }
+.mascot-artist > svg {
+  right: -92px;
+  top: -9px;
+  width: 340px;
+  height: 340px;
+}
+.mascot-swimmer > svg {
+  right: -24px;
+  top: 24px;
+}
+.mascot-sporty > svg {
+  right: -10px;
+  top: 19px;
+}
 .mascot-body {
-  transform-origin: 110px 120px;
+  transform-origin: 110px 160px;
 }
 .mascot-face {
-  transform-origin: 86px 90px;
+  transform-origin: 105px 72px;
 }
 .mascot-eyes {
-  transform-origin: 86px 77px;
+  transform-origin: 105px 61px;
 }
 .empty-day {
   position: relative;
@@ -131,8 +156,14 @@
   padding-right: 150px;
 }
 .empty-day .card-mascot {
-  width: 280px;
-  height: 280px;
+  width: 160px;
+  height: 170px;
+}
+.empty-day .card-mascot > svg {
+  width: 250px;
+  height: 250px;
+  right: -100px;
+  top: 25px;
 }
 .empty-day h2 {
   font-size: 25px;
@@ -143,14 +174,20 @@
 .week-row {
   position: relative;
   overflow: hidden;
-  grid-template-columns: 54px minmax(0, 1fr) 70px;
+  grid-template-columns: 54px minmax(0, 1fr) 94px;
   min-height: 116px;
 }
 .week-row .card-mascot {
   width: 145px;
   height: 145px;
-  right: -55px;
-  bottom: -47px;
+  right: 0;
+  bottom: 0;
+}
+.week-row .card-mascot > svg {
+  width: 145px;
+  height: 145px;
+  right: -45px;
+  top: 30px;
 }
 .week-row .week-summary {
   z-index: 1;
@@ -222,7 +259,7 @@
       transform: translateY(3px) scale(1.025, 0.975);
     }
     26% {
-      transform: translateY(-9px) scale(0.985, 1.02);
+      transform: translateY(-19px) scale(0.96, 1.04);
     }
     38% {
       transform: translateY(1px) scale(1.01, 0.99);
@@ -234,7 +271,7 @@
       transform: translate(0, 0) rotate(0);
     }
     33% {
-      transform: translate(-6px, -3px) rotate(-3deg);
+      transform: translate(-13px, -9px) rotate(-5deg);
     }
     68% {
       transform: translate(3px, 2px) rotate(2deg);
@@ -247,7 +284,7 @@
     }
     25%,
     45% {
-      transform: rotate(-5deg);
+      transform: translateX(-9px) rotate(-7deg);
     }
     70% {
       transform: rotate(2deg);
@@ -280,11 +317,11 @@
 }
 @media (max-width: 960px) {
   .diary-card {
-    min-height: 285px;
+    min-height: 420px;
   }
   .meal-list,
   .activity-list {
-    padding-right: 145px;
+    padding-right: 0;
   }
 }
 @media (max-width: 767px) {
@@ -309,18 +346,15 @@
     font-size: 26px;
   }
   .diary-card {
-    padding: 23px;
-    min-height: 275px;
+    padding: 23px 23px 175px;
+    min-height: 400px;
   }
   .card-mascot {
-    width: 255px;
-    height: 255px;
-    right: -85px;
-    bottom: -82px;
+    height: 170px;
   }
   .meal-list,
   .activity-list {
-    padding-right: 135px;
+    padding-right: 0;
   }
   .meal-list {
     gap: 16px;
@@ -330,28 +364,28 @@
     font-size: 14px;
   }
   .empty-day {
-    padding-right: 145px;
+    padding-right: 0;
     min-height: 225px;
   }
   .empty-day h2 {
     font-size: 22px;
   }
   .empty-day .card-mascot {
-    width: 245px;
-    height: 245px;
-    right: -100px;
-    bottom: -105px;
+    width: 145px;
+    height: 170px;
+    right: 0;
+    bottom: 0;
   }
   .week-row {
-    grid-template-columns: 38px minmax(0, 1fr) 54px;
+    grid-template-columns: 38px minmax(0, 1fr) 88px;
     gap: 10px;
     padding: 15px 12px;
   }
   .week-row .card-mascot {
     width: 128px;
     height: 128px;
-    right: -48px;
-    bottom: -45px;
+    right: 0;
+    bottom: 0;
   }
   .bag-heading {
     padding: 19px 22px;
@@ -369,15 +403,12 @@
   }
   .meal-list,
   .activity-list {
-    padding-right: 110px;
+    padding-right: 0;
   }
   .card-mascot {
-    width: 220px;
-    height: 220px;
-    right: -80px;
-    bottom: -68px;
+    height: 155px;
   }
   .week-row {
-    grid-template-columns: 32px minmax(0, 1fr) 45px;
+    grid-template-columns: 32px minmax(0, 1fr) 82px;
   }
 }

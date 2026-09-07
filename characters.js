@@ -25,44 +25,46 @@
   // comes from expression, shape and motion, never from clothing or accessories.
   const designs = {
     sporty: {
-      body: "#a9c5ad",
-      ink: "#425b49",
+      body: "#b2bda0",
+      ink: "#414a3e",
       shape:
-        "M111 12C165 7 205 43 207 99C216 151 179 207 118 210C61 217 14 180 12 119C8 67 50 17 111 12Z",
-      eyes: '<ellipse cx="72" cy="78" rx="7" ry="10" transform="rotate(12 72 78)"/><ellipse cx="98" cy="73" rx="7" ry="10" transform="rotate(12 98 73)"/>',
-      mouth:
-        '<path d="M71 100Q87 114 108 94" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+        "M110 13C166 11 207 52 208 111C210 168 169 210 111 210C52 211 12 173 12 116C10 59 51 15 110 13Z",
+      eyes: '<path d="M82 56C82 67 96 68 98 57M112 57C113 68 127 67 127 56"/>',
+      mouth: '<path d="M70 75C84 97 124 99 140 74"/>',
+      pose: "rotate(-9 110 110)",
     },
     swimmer: {
-      body: "#abc4cb",
-      ink: "#43636b",
+      body: "#a4b9c0",
+      ink: "#3c5054",
       shape:
-        "M103 13C160 5 201 41 208 99C214 153 177 203 121 211C65 219 19 187 12 129C5 78 43 22 103 13Z",
-      eyes: '<path d="M64 76Q72 85 80 74M91 72Q99 81 107 70" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
-      mouth: '<ellipse cx="89" cy="103" rx="6" ry="8"/>',
+        "M108 16C161 9 204 48 208 106C214 163 174 208 118 211C59 216 14 177 12 122C9 64 48 22 108 16Z",
+      eyes: '<path d="M80 57C81 68 95 68 96 57M111 57C112 68 126 68 127 57"/>',
+      mouth: '<path d="M71 76C86 96 121 96 137 76"/>',
+      pose: "rotate(12 110 110)",
     },
     artist: {
-      body: "#cbb3c9",
-      ink: "#655269",
+      body: "#c4a5af",
+      ink: "#57424a",
       shape:
-        "M109 11C166 8 199 47 208 104C220 157 181 206 123 211C65 219 17 183 12 126C5 72 51 19 109 11Z",
-      eyes: '<ellipse cx="72" cy="73" rx="7" ry="11" transform="rotate(-12 72 73)"/><ellipse cx="99" cy="83" rx="7" ry="10" transform="rotate(-12 99 83)"/>',
-      mouth:
-        '<path d="M75 99Q83 112 99 105" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
+        "M112 12C164 10 202 47 207 101C214 157 179 204 122 210C63 217 17 180 12 125C6 67 52 15 112 12Z",
+      eyes: '<path d="M80 55C79 65 93 69 97 59M111 59C109 69 122 73 127 64"/>',
+      mouth: '<path d="M69 75C79 96 112 106 135 88"/>',
+      pose: "rotate(-14 110 110)",
     },
     foodie: {
-      body: "#dbc98e",
-      ink: "#71633e",
+      body: "#d7a47c",
+      ink: "#584637",
       shape:
-        "M103 12C158 3 206 43 211 101C218 158 183 208 125 210C66 219 20 188 11 130C2 72 43 23 103 12Z",
-      eyes: '<path d="M65 79Q73 67 81 78M92 75Q100 64 108 74" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>',
-      mouth: '<path d="M72 95Q88 100 105 91C103 115 80 120 72 95Z"/>',
+        "M108 14C165 9 208 49 210 107C215 165 174 208 117 210C57 214 12 174 11 117C9 58 49 17 108 14Z",
+      eyes: '<path d="M80 56C80 67 94 68 97 57M111 57C112 68 126 68 128 57"/>',
+      mouth: '<path d="M68 76C84 99 125 101 143 75"/>',
+      pose: "rotate(-7 110 110)",
     },
   };
   function character(kind, small = false) {
     if (!personalities.includes(kind)) kind = "artist";
     const design = designs[kind];
-    return `<span class="card-mascot mascot-${kind}${small ? " mascot-mini" : ""}" aria-hidden="true"><svg viewBox="0 0 220 220" focusable="false" style="color:${design.ink}"><g class="mascot-body"><path class="mascot-silhouette" d="${design.shape}" fill="${design.body}"/><g class="mascot-face" fill="currentColor"><g class="mascot-eyes">${design.eyes}</g><g class="mascot-mouth">${design.mouth}</g></g></g></svg></span>`;
+    return `<span class="card-mascot mascot-${kind}${small ? " mascot-mini" : ""}" aria-hidden="true"><svg viewBox="0 0 220 220" focusable="false" style="color:${design.ink}"><g class="mascot-body"><g transform="${design.pose}"><path class="mascot-silhouette" d="${design.shape}" fill="${design.body}"/><g class="mascot-face" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><g class="mascot-eyes">${design.eyes}</g><g class="mascot-mouth">${design.mouth}</g></g></g></g></svg></span>`;
   }
   const api = { character, forActivities };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
