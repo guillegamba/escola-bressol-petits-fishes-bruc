@@ -165,12 +165,17 @@
       .filter(([, row]) => row.menu.length || row.activities.length)
       .map(([key]) => key)
       .sort();
+  // "de" elides before a vowel-initial month: d'abril, d'agost, d'octubre.
+  const ofMonth = (date) => {
+    const label = format(date, { month: "long", year: "numeric" });
+    return `${/^[aeiou]/i.test(label) ? "d’" : "de "}${label}`;
+  };
   function renderNotice() {
     const key = dateKey(state.selected).slice(0, 7);
     const hasMonth = publishedKeys().some((d) => d.startsWith(key));
     $("schedule-status").innerHTML =
       state.loaded && !hasMonth
-        ? `<div class="schedule-notice">${icon("calendar-clock")}<div><strong>Encara no tenim la programació de ${escape(format(state.selected, { month: "long", year: "numeric" }))}.</strong><p>El menú i les activitats apareixeran quan es publiquin.</p><button class="text-button" data-action="archive">Consulta l’últim dia publicat ${icon("arrow-up-right")}</button></div></div>`
+        ? `<div class="schedule-notice">${icon("calendar-clock")}<div><strong>Encara no tenim la programació ${escape(ofMonth(state.selected))}.</strong><p>El menú i les activitats apareixeran quan es publiquin.</p><button class="text-button" data-action="archive">Consulta l’últim dia publicat ${icon("arrow-up-right")}</button></div></div>`
         : "";
   }
   function activity(text, key) {

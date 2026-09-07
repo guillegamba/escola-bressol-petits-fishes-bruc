@@ -28,7 +28,18 @@ L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia labor
 | `HORARI_I2_ok_.pdf` | Horari setmanal dels Giraffes: la rutina que omple les activitats de cada dia lectiu. |
 | `menu_sept.pdf`     | Menú de l'1 al 30 de setembre del 2026.                                               |
 | Newsletter Setembre | Projecte d'Adaptació, tancaments i celebracions del mes.                              |
-| Calendari escolar   | Festius, dies de lliure disposició, casals, inici i final de piscina i tallers.       |
+| Calendari escolar   | Festius, dies de lliure disposició, casals, piscina, tallers i biblioteca.            |
+
+El calendari del curs hi és sencer, del 7 de setembre del 2026 al 30 de juliol del 2027:
+
+| Bloc              | Dates                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------- |
+| Curs              | Del 7 de setembre del 2026 al 30 de juliol del 2027.                                  |
+| Piscina           | Cada dilluns, del 5 d'octubre del 2026 al 14 de juny del 2027.                        |
+| Lliure disposició | 25/09, 30/10, 20/11, 07/12, 24/12, 05/01, 08/02, 30/04, 18/05 i 25/06.                |
+| Casals            | Setembre 1-4; Nadal 21-23 i 28-31/12 i 04/01; Setmana Santa 22-25/03; agost del 2027. |
+| Tallers           | 23/10, 18/12, 23/04 i 23/07, sempre en divendres.                                     |
+| Biblioteca        | Un dimecres cada mes, d'octubre a juliol.                                             |
 
 Rutina setmanal dels Giraffes (`HORARI_I2_ok_.pdf`):
 
