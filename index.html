@@ -52,14 +52,7 @@
         ><span class="brand-name">Giraffes Bruc</span></a
       >
       <div class="header-actions">
-        <button
-          class="icon-button"
-          id="motion-btn"
-          aria-label="Atura les animacions"
-          aria-pressed="false"
-        >
-          <i data-lucide="pause"></i></button
-        ><span class="course" id="course-label"></span
+        <span class="course" id="course-label"></span
         ><button class="icon-button" id="theme-btn" aria-label="Canvia el tema">
           <i data-lucide="sun-moon"></i>
         </button>
@@ -82,18 +75,11 @@
           <div class="toolbar">
             <div class="view-switch" role="group" aria-label="Vista del diari">
               <button id="daily-btn" aria-pressed="true">Diari</button
-              ><button id="weekly-btn" aria-pressed="false">Setmana</button>
+              ><button id="weekly-btn" aria-pressed="false">Setmana</button
+              ><button id="monthly-btn" aria-pressed="false">Mes</button>
             </div>
             <div class="date-tools">
-              <button id="today-btn" class="text-button">Avui</button
-              ><button
-                id="calendar-toggle-btn"
-                class="icon-button"
-                aria-label="Obre el calendari"
-                aria-haspopup="dialog"
-              >
-                <i data-lucide="calendar-days"></i>
-              </button>
+              <button id="today-btn" class="text-button">Avui</button>
             </div>
           </div>
           <div class="date-heading">
@@ -163,42 +149,6 @@
     <footer class="site-footer shell">
       <span>🥸 no oficial - pot contenir errors</span>
     </footer>
-    <dialog id="calendar-dialog" aria-labelledby="calendar-title">
-      <div class="dialog-heading">
-        <h2 id="calendar-title">Calendari</h2>
-        <button
-          class="icon-button"
-          id="close-calendar"
-          aria-label="Tanca el calendari"
-        >
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-      <div class="calendar-nav">
-        <button class="icon-button" id="prev-month" aria-label="Mes anterior">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <h3 id="calendar-month"></h3>
-        <button class="icon-button" id="next-month" aria-label="Mes següent">
-          <i data-lucide="chevron-right"></i>
-        </button>
-      </div>
-      <div class="calendar-weekdays" aria-hidden="true">
-        <span>dl</span><span>dt</span><span>dc</span><span>dj</span
-        ><span>dv</span><span>ds</span><span>dg</span>
-      </div>
-      <div id="calendar-grid" class="calendar-grid"></div>
-      <p class="calendar-legend">
-        <span><b class="school-marker"></b>Amb programació</span
-        ><span><b class="holiday-marker"></b>Festiu</span>
-      </p>
-      <div class="calendar-bottom">
-        <button class="text-button" id="calendar-today">Ves a avui</button
-        ><button class="text-button" id="last-published">
-          Últim dia publicat
-        </button>
-      </div>
-    </dialog>
     <div class="toast" id="toast" role="status" hidden></div>
     <noscript
       ><p class="shell">

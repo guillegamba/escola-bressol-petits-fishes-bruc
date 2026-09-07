@@ -7,7 +7,10 @@ const {
   dateKey,
   addDays,
   weekDates,
+  schoolDates,
   dayStatus,
+  dayKind,
+  isWeekend,
 } = require("../data.js");
 const header = "Date,Type,Label,Activities,Menu\n";
 test("parses the complete published calendar without changing meals", () => {
@@ -100,4 +103,42 @@ test("characters reflect activity keywords, including Catalan accents", () => {
     "artist",
   );
   assert.ok(character("sporty").includes("mascot-ball"));
+});
+
+test("day kinds separate closures from special days", () => {
+  const data = parseCalendar(
+    "Date,Type,Label,Activities,Menu,Supplies,SupplySource\n" +
+      "2026-09-07,school,,Joc,Arròs,,\n" +
+      "2026-09-08,school,Taller 🎨,,,,\n" +
+      "2026-09-11,holiday,Lliure Disposició,,,,\n" +
+      "2026-09-05,school,Portes obertes,,,,\n",
+  );
+  assert.equal(dayKind(parseDate("2026-09-07"), data), "school");
+  assert.equal(dayKind(parseDate("2026-09-08"), data), "special");
+  assert.equal(dayKind(parseDate("2026-09-11"), data), "closed");
+  assert.equal(dayKind(parseDate("2026-09-09"), data), "unpublished");
+  assert.equal(dayKind(parseDate("2026-09-12"), data), "weekend");
+  // An explicit row outranks the weekend default.
+  assert.equal(dayKind(parseDate("2026-09-05"), data), "special");
+});
+
+test("a school week is Monday to Friday unless a weekend row exists", () => {
+  const data = parseCalendar(
+    "Date,Type,Label,Activities,Menu,Supplies,SupplySource\n" +
+      "2026-09-05,school,Portes obertes,,,,\n",
+  );
+  assert.deepEqual(schoolDates(parseDate("2026-09-09")).map(dateKey), [
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10",
+    "2026-09-11",
+  ]);
+  assert.equal(schoolDates(parseDate("2026-09-02"), data).length, 6);
+  assert.deepEqual(
+    schoolDates(parseDate("2026-09-02"), data).map(dateKey).at(-1),
+    "2026-09-05",
+  );
+  assert.equal(isWeekend(parseDate("2026-09-05")), true);
+  assert.equal(isWeekend(parseDate("2026-09-07")), false);
 });

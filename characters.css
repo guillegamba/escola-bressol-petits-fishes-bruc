@@ -188,35 +188,35 @@
   animation: none !important;
 }
 @media (prefers-reduced-motion: no-preference) {
-  :root:not([data-motion="paused"]) .mascot-eyes {
+  .mascot-eyes {
     animation: character-blink 6s infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-sporty .mascot-body {
+  .mascot-sporty .mascot-body {
     animation: sporty-bounce 3s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-ball {
+  .mascot-ball {
     animation: ball-bounce 1.5s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-body {
+  .mascot-swimmer .mascot-body {
     animation: swimmer-bob 4s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-left-arm {
+  .mascot-swimmer .mascot-left-arm {
     animation: swimmer-stroke 4s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-right-arm {
+  .mascot-swimmer .mascot-right-arm {
     animation: swimmer-stroke 4s ease-in-out -2s infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-water {
+  .mascot-water {
     animation: water-drift 4s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-artist .mascot-right-arm,
-  :root:not([data-motion="paused"]) .mascot-brush {
+  .mascot-artist .mascot-right-arm,
+  .mascot-brush {
     animation: artist-paint 5s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-foodie .mascot-spoon {
+  .mascot-foodie .mascot-spoon {
     animation: spoon-wave 5s ease-in-out infinite;
   }
-  :root:not([data-motion="paused"]) .mascot-foodie .mascot-body {
+  .mascot-foodie .mascot-body {
     animation: foodie-sway 5s ease-in-out infinite;
   }
   .diary-card:hover .mascot-pupils,
@@ -316,9 +316,6 @@
       transform: rotate(3deg);
     }
   }
-}
-:root[data-motion="paused"] .card-mascot * {
-  animation: none !important;
 }
 @media (max-width: 960px) {
   .diary-card {

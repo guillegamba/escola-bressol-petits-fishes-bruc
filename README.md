@@ -7,17 +7,19 @@ Diari no oficial de l'**Escola Bressol Petits Giraffes (Bruc)**, el grup que a l
 ## Què fa
 
 - **Diari:** menú, activitats, celebracions i cançó del mes.
-- **Setmana:** els set dies amb el menú i les activitats. Toca un dia per veure'n el detall.
-- **Calendari:** tots els mesos, navegació amb teclat, botó «Avui» i accés a l'últim dia publicat. Les fletxes del diari també admeten el gest de lliscar.
-- **Dates compartibles:** «Copia el dia» o «Copia la setmana» crea un enllaç a la vista seleccionada.
+- **Tres vistes en un sol selector:** Diari, Setmana i Mes. Les fletxes avancen un dia, una setmana o un mes segons la vista, i al diari també admeten el gest de lliscar.
+- **Setmana:** de dilluns a divendres amb el menú i les activitats. Toca un dia per veure'n el detall.
+- **Mes:** graella del mes amb navegació amb teclat. Els caps de setmana hi surten en gris i no es poden triar.
+- **Dies tancats i dies especials:** un dia sense escola (festiu, lliure disposició) es marca en terracota, amb un quadrat a la llegenda i el rètol «Escola tancada»; un dia amb escola i alguna cosa especial (taller, biblioteca, casal, celebració) porta un punt ambre. La resta del detall es queda dins del dia.
+- **Dates compartibles:** «Copia el dia», «Copia la setmana» o «Copia el mes» crea un enllaç a la vista seleccionada.
 - **La motxilla:** mostra només els materials indicats a les dades de l'escola, amb la referència del document i la pàgina. Si no n'hi ha, queda buida. Les caselles es desen per data i material en aquest navegador; no hi ha suggeriments ni entrada manual.
-- **Personatges:** el menú té un cuiner; les activitats trien un esportista, un nedador o un artista segons el text. Són il·lustracions SVG originals integrades a les targetes, amb animacions pròpies i un control per aturar-les. La preferència de moviment reduït les desactiva.
+- **Personatges:** el menú té un cuiner; les activitats trien un esportista, un nedador o un artista segons el text. Són il·lustracions SVG originals integrades a les targetes, amb animacions pròpies. La preferència de moviment reduït del sistema les desactiva.
 - **Tema clar i fosc:** segueix el sistema fins que es tria manualment. Respecta el moviment reduït i permet ampliar el text.
 - **Sense connexió:** després de la primera visita amb connexió, es desen la interfície i les dades. Un avís identifica la còpia desada. Les dades es comproven primer a la xarxa quan hi ha connexió.
 
 ## Nou curs i dades pendents
 
-L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia laborable sense fila es mostra com a **programació pendent**, mai com a festiu. Els dissabtes i diumenges sense fila es mostren com a cap de setmana; una fila explícita té prioritat.
+L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia laborable sense fila es mostra com a **programació pendent**, mai com a festiu. Els dissabtes i diumenges sense fila es mostren com a cap de setmana; una fila explícita té prioritat i els torna a fer visibles i triables. Les fletxes del diari salten el cap de setmana: després de divendres ve dilluns.
 
 **El setembre del 2026 està publicat sencer.** A partir d'octubre el CSV només conté el calendari del curs (festius, dies de lliure disposició, casals, piscina i tallers): els dies hi surten amb el seu rètol, però amb el menú i les activitats pendents. Un mes es considera publicat només quan algun dia té menú o activitats, de manera que l'avís «Encara no tenim la programació de…» i el botó «Últim dia publicat» ignoren les files de calendari.
 
@@ -72,7 +74,7 @@ L'aplicació no necessita compilació. Les eines de desenvolupament només serve
 | --------------------------------- | ------------------------------------------------------------------------------------ |
 | `index.html`                      | Estructura accessible i diàleg del calendari.                                        |
 | `styles.css`                      | Disseny adaptable, temes i moviment reduït.                                          |
-| `script.js`                       | Vistes, navegació, cançons i llista personal.                                        |
+| `script.js`                       | Vistes (dia, setmana, mes), navegació, cançons i llista personal.                    |
 | `data.js`                         | CSV validat, dates i estats dels dies; compartit amb les proves i el service worker. |
 | `calendar.csv`                    | Menús, activitats i festius publicats.                                               |
 | `sw.js`                           | Memòria cau de la PWA i actualització de les dades.                                  |
@@ -121,7 +123,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-Les proves de navegador cobreixen el canvi de curs, dies pendents, arxiu, setmana, teclat i focus del diàleg, materials amb font i selecció persistent per data, cançons, cinc amplades, errors de dades i recàrrega offline amb una URL compartida. Generen captures a `test-results/`, que no es versiona.
+Les proves de navegador cobreixen el canvi de curs, dies pendents, arxiu, la setmana de dilluns a divendres, la vista de mes amb teclat i caps de setmana inactius, el salt del cap de setmana amb les fletxes, materials amb font i selecció persistent per data, cançons, cinc amplades, errors de dades i recàrrega offline amb una URL compartida. Generen captures a `test-results/`, que no es versiona.
 
 Opcions: `BASE_URL` (amb `/` final), `CHROME_PATH` (Chrome ja instal·lat) i `ARTIFACT_DIR`.
 

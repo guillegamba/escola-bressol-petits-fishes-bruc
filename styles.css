@@ -6,7 +6,7 @@
   src: url("./assets/nunito-latin.woff2") format("woff2");
 }
 /* One token system, soft panels (24px), pill controls, 12px inputs.
-   Layers: header 10, toast 30, native dialog in the top layer. */
+   Layers: header 10, toast 30. */
 :root {
   color-scheme: light;
   --paper: #fff9f0;
@@ -23,6 +23,11 @@
   --hover: #efeee5;
   --focus: #175e49;
   --shadow: 0 8px 30px #243e3208;
+  --closed: #ad5f42;
+  --closed-soft: #fae3d9;
+  --closed-ink: #86402a;
+  --special: #b07d10;
+  --special-soft: #fff0bd;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
@@ -40,6 +45,11 @@
   --hover: #344239;
   --focus: #f8da55;
   --shadow: none;
+  --closed: #e9a184;
+  --closed-soft: #4a2e25;
+  --closed-ink: #f4c8b4;
+  --special: #f0c14b;
+  --special-soft: #423b25;
 }
 * {
   box-sizing: border-box;
@@ -252,7 +262,8 @@ button[hidden],
 }
 .week-strip {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }
@@ -288,8 +299,10 @@ button[hidden],
 .week-day.is-today:not([aria-pressed="true"]) {
   box-shadow: inset 0 0 0 1.5px var(--green);
 }
-.week-day.has-data:after,
-.calendar-day.has-data:after {
+.week-day.kind-school:after,
+.week-day.kind-special:after,
+.calendar-day.kind-school:after,
+.calendar-day.kind-special:after {
   content: "";
   position: absolute;
   bottom: 6px;
@@ -298,9 +311,24 @@ button[hidden],
   border-radius: 50%;
   background: var(--green);
 }
-.week-day.is-holiday:after,
-.calendar-day.is-holiday:after {
-  background: #ad5f42;
+.week-day.kind-special:after,
+.calendar-day.kind-special:after {
+  background: var(--special);
+  width: 5px;
+  height: 5px;
+}
+.week-day.kind-closed,
+.calendar-day.kind-closed {
+  background: var(--closed-soft);
+  color: var(--closed-ink);
+}
+.calendar-day.kind-weekend {
+  color: var(--muted);
+  opacity: 0.5;
+  cursor: default;
+}
+.calendar-day.kind-weekend:hover {
+  background: transparent;
 }
 .schedule-notice {
   display: flex;
@@ -437,16 +465,27 @@ button[hidden],
   width: 12px;
   height: 12px;
 }
-.special-day {
+.day-flag {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--yellow-soft);
+  background: var(--special-soft);
   padding: 14px 18px;
   border-radius: 16px;
   margin-bottom: 16px;
   font-size: 14px;
   font-weight: 800;
+}
+.day-flag.is-closed {
+  display: inline-flex;
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: var(--closed);
+  color: var(--paper);
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-weight: 900;
 }
 .empty-day {
   border-radius: 24px;
@@ -480,8 +519,11 @@ button[hidden],
   max-width: 390px;
   margin-top: 12px;
 }
-.empty-day.holiday {
-  background: var(--yellow-soft);
+.empty-day.closed {
+  background: var(--closed-soft);
+}
+.empty-day.weekend {
+  background: var(--green-soft);
 }
 .empty-day.unpublished {
   background: var(--surface);
@@ -669,8 +711,26 @@ button[hidden],
   overflow-wrap: anywhere;
 }
 .week-summary .week-special {
-  color: var(--green);
+  color: var(--special);
   font-weight: 900;
+}
+.week-row.kind-closed {
+  background: var(--closed-soft);
+  border-color: transparent;
+  color: var(--closed-ink);
+}
+.week-row.kind-closed .week-date span,
+.week-row.kind-closed .week-row-detail {
+  color: var(--closed-ink);
+}
+.week-row.kind-closed .week-row-detail {
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+}
+.week-row.kind-special {
+  border-color: var(--special);
 }
 .week-row > svg {
   width: 16px;
@@ -710,41 +770,11 @@ button[hidden],
   white-space: nowrap;
   border: 0;
 }
-dialog {
-  border: 1px solid var(--line);
-  border-radius: 28px;
+.month-view {
   background: var(--surface);
-  color: var(--ink);
-  width: min(430px, calc(100% - 32px));
-  padding: 24px;
-  max-height: 90dvh;
-  overflow: auto;
-  box-shadow: 0 24px 90px #142a3240;
-}
-dialog::backdrop {
-  background: #18291f80;
-  backdrop-filter: blur(4px);
-}
-.dialog-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.dialog-heading h2 {
-  font-size: 24px;
-  font-weight: 900;
-}
-.calendar-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 24px 0 18px;
-  gap: 8px;
-}
-.calendar-nav h3 {
-  font-size: 17px;
-  font-weight: 900;
-  text-transform: capitalize;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 20px;
 }
 .calendar-weekdays,
 .calendar-grid {
@@ -761,7 +791,7 @@ dialog::backdrop {
 }
 .calendar-day {
   position: relative;
-  min-height: 42px;
+  min-height: 46px;
   border-radius: 12px;
   background: transparent;
   font-weight: 800;
@@ -780,11 +810,13 @@ dialog::backdrop {
 }
 .calendar-legend {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 8px 18px;
   margin-top: 20px;
   font-size: 10px;
   color: var(--muted);
+  font-weight: 700;
 }
 .calendar-legend > span {
   display: flex;
@@ -792,23 +824,23 @@ dialog::backdrop {
   gap: 6px;
 }
 .calendar-legend b {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+  flex: none;
 }
-.school-marker {
+.marker-school {
   background: var(--green);
 }
-.holiday-marker {
-  background: #ad5f42;
+.marker-special {
+  background: var(--special);
 }
-.calendar-bottom {
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 20px;
-  padding-top: 10px;
+/* A square, not a dot: the closure marker stays legible without relying on hue. */
+.marker-closed {
+  background: var(--closed);
+  border-radius: 2px;
+  width: 8px;
+  height: 8px;
 }
 .toast {
   position: fixed;
