@@ -1,6 +1,6 @@
-# 🐟 Fishes Bruc - Diari
+# 🦒 Giraffes Bruc - Diari
 
-Diari no oficial de l'**Escola Bressol Petits Fishes (Bruc)**. Per a cada dia lectiu mostra el menú i les activitats, amb un calendari per moure't entre dies. És una app web (PWA) feta per al mòbil: funciona sense connexió i es pot instal·lar a la pantalla d'inici.
+Diari no oficial de l'**Escola Bressol Petits Giraffes (Bruc)**, el grup que a la newsletter de l'escola apareix com a _Southern Giraffes_. Per a cada dia lectiu mostra el menú i les activitats, amb un calendari per moure't entre dies. És una app web (PWA) feta per al mòbil: funciona sense connexió i es pot instal·lar a la pantalla d'inici.
 
 > ⚠️ **No oficial.** Projecte personal, pot contenir errors. No té cap vincle amb l'escola.
 
@@ -19,7 +19,28 @@ Diari no oficial de l'**Escola Bressol Petits Fishes (Bruc)**. Per a cada dia le
 
 L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia laborable sense fila es mostra com a **programació pendent**, mai com a festiu. Els dissabtes i diumenges sense fila es mostren com a cap de setmana; una fila explícita té prioritat.
 
-**Les dades del repositori arriben al 31 de juliol de 2026. Cal afegir la programació real de setembre al CSV.** El redisseny no inventa ni trasllada menús, activitats o festius del curs anterior. El curs de la capçalera es calcula de setembre a agost; no implica que hi hagi una programació publicada.
+**El setembre del 2026 està publicat sencer.** A partir d'octubre el CSV només conté el calendari del curs (festius, dies de lliure disposició, casals, piscina i tallers): els dies hi surten amb el seu rètol, però amb el menú i les activitats pendents. Un mes es considera publicat només quan algun dia té menú o activitats, de manera que l'avís «Encara no tenim la programació de…» i el botó «Últim dia publicat» ignoren les files de calendari.
+
+### Curs 2026-2027
+
+| Font                | Què aporta                                                                            |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| `HORARI_I2_ok_.pdf` | Horari setmanal dels Giraffes: la rutina que omple les activitats de cada dia lectiu. |
+| `menu_sept.pdf`     | Menú de l'1 al 30 de setembre del 2026.                                               |
+| Newsletter Setembre | Projecte d'Adaptació, tancaments i celebracions del mes.                              |
+| Calendari escolar   | Festius, dies de lliure disposició, casals, inici i final de piscina i tallers.       |
+
+Rutina setmanal dels Giraffes (`HORARI_I2_ok_.pdf`):
+
+| Dia       | Matí                   | Tarda               |
+| --------- | ---------------------- | ------------------- |
+| Dilluns   | Piscina                | Joc heurístic       |
+| Dimarts   | Activitat del projecte | Joc simbòlic        |
+| Dimecres  | Psicomotricitat        | Panera del projecte |
+| Dijous    | Música                 | Joc simbòlic        |
+| Divendres | Activitat del projecte | Conta contes        |
+
+La piscina no consta als dilluns de setembre: el calendari escolar marca l'inici de la piscina a l'octubre, i el setembre és el mes d'adaptació. Tampoc no es dedueixen materials de la piscina; `Supplies` queda buit mentre l'escola no els indiqui per escrit.
 
 ## Executar-ho en local
 
