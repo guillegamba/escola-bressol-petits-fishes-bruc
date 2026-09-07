@@ -1,4 +1,5 @@
-/* The cast sits in card corners; text always owns a separate column. */
+/* Oversized organic shapes extend beyond the card bounds and are clipped by
+   the card, like the reference. The text keeps its own clear column. */
 .workspace {
   padding-top: 28px;
 }
@@ -56,18 +57,18 @@
   min-height: 330px;
 }
 .menu-card {
-  background: #f7eac0;
+  background: #f1e7c9;
 }
 .activities-card.personality-sporty {
-  background: #dcedd9;
+  background: #e2eade;
   color: #244a33;
 }
 .activities-card.personality-swimmer {
-  background: #dcecef;
+  background: #e0eaec;
   color: #254d5a;
 }
 .activities-card.personality-artist {
-  background: #f3dce9;
+  background: #ece0e9;
   color: #633e57;
 }
 :root[data-theme="dark"] .menu-card {
@@ -92,7 +93,7 @@
 .meal-list,
 .activity-list {
   position: relative;
-  padding-right: 95px;
+  padding-right: 145px;
 }
 .meal-text,
 .activity-list li {
@@ -101,10 +102,10 @@
 .card-mascot {
   position: absolute;
   display: block;
-  right: -18px;
-  bottom: -10px;
-  width: 164px;
-  height: 150px;
+  right: -98px;
+  bottom: -86px;
+  width: 280px;
+  height: 280px;
   pointer-events: none;
   isolation: isolate;
 }
@@ -115,35 +116,14 @@
   overflow: visible;
   stroke-width: initial;
 }
-.card-mascot .mascot-body {
-  transform-origin: 100px 155px;
+.mascot-body {
+  transform-origin: 110px 120px;
+}
+.mascot-face {
+  transform-origin: 86px 90px;
 }
 .mascot-eyes {
-  transform-origin: 100px 87px;
-}
-.mascot-left-arm {
-  transform-origin: 57px 112px;
-}
-.mascot-right-arm {
-  transform-origin: 143px 111px;
-}
-.mascot-brush {
-  transform-origin: 165px 83px;
-}
-.mascot-spoon {
-  transform-origin: 165px 85px;
-}
-.mascot-hat {
-  transform-origin: 100px 52px;
-}
-.mascot-ball {
-  transform-origin: 173px 180px;
-}
-.mascot-water {
-  transform-origin: 100px 156px;
-}
-.mascot-swimmer .mascot-legs {
-  display: none;
+  transform-origin: 86px 77px;
 }
 .empty-day {
   position: relative;
@@ -151,8 +131,8 @@
   padding-right: 150px;
 }
 .empty-day .card-mascot {
-  width: 175px;
-  height: 159px;
+  width: 280px;
+  height: 280px;
 }
 .empty-day h2 {
   font-size: 25px;
@@ -167,10 +147,10 @@
   min-height: 116px;
 }
 .week-row .card-mascot {
-  width: 85px;
-  height: 78px;
-  right: 0;
-  bottom: 4px;
+  width: 145px;
+  height: 145px;
+  right: -55px;
+  bottom: -47px;
 }
 .week-row .week-summary {
   z-index: 1;
@@ -187,133 +167,114 @@
 .mascot-mini .mascot-eyes {
   animation: none !important;
 }
+/* Brief greeting on entry, then rest. Hover/focus invites another movement.
+   No perpetual motion and no new controls added to the user's navigation. */
 @media (prefers-reduced-motion: no-preference) {
   .mascot-eyes {
-    animation: character-blink 6s infinite;
+    animation: soft-blink 4.8s ease 1;
   }
   .mascot-sporty .mascot-body {
-    animation: sporty-bounce 3s ease-in-out infinite;
-  }
-  .mascot-ball {
-    animation: ball-bounce 1.5s ease-in-out infinite;
+    animation: sporty-settle 4.8s ease-in-out 1;
   }
   .mascot-swimmer .mascot-body {
-    animation: swimmer-bob 4s ease-in-out infinite;
+    animation: swimmer-drift 4.8s ease-in-out 1;
   }
-  .mascot-swimmer .mascot-left-arm {
-    animation: swimmer-stroke 4s ease-in-out infinite;
-  }
-  .mascot-swimmer .mascot-right-arm {
-    animation: swimmer-stroke 4s ease-in-out -2s infinite;
-  }
-  .mascot-water {
-    animation: water-drift 4s ease-in-out infinite;
-  }
-  .mascot-artist .mascot-right-arm,
-  .mascot-brush {
-    animation: artist-paint 5s ease-in-out infinite;
-  }
-  .mascot-foodie .mascot-spoon {
-    animation: spoon-wave 5s ease-in-out infinite;
+  .mascot-artist .mascot-body {
+    animation: artist-tilt 4.8s ease-in-out 1;
   }
   .mascot-foodie .mascot-body {
-    animation: foodie-sway 5s ease-in-out infinite;
+    animation: contented-sway 4.8s ease-in-out 1;
   }
-  .diary-card:hover .mascot-pupils,
-  .week-row:hover .mascot-pupils {
-    transform: translate(-3px, -2px);
-    transition: transform 0.2s;
+  .mascot-face {
+    transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  @keyframes character-blink {
+  .diary-card:hover .mascot-face,
+  .diary-card:focus-within .mascot-face,
+  .week-row:hover .mascot-face,
+  .week-row:focus-visible .mascot-face {
+    transform: translate(-4px, -2px) rotate(-4deg);
+  }
+  .diary-card:hover .mascot-body,
+  .diary-card:focus-within .mascot-body {
+    animation: curious-rock 3.6s ease-in-out 1;
+  }
+  @keyframes soft-blink {
     0%,
-    43%,
-    47%,
+    28%,
+    34%,
+    73%,
+    79%,
     100% {
       transform: scaleY(1);
     }
-    45% {
+    31%,
+    76% {
       transform: scaleY(0.12);
     }
   }
-  @keyframes sporty-bounce {
+  @keyframes sporty-settle {
     0%,
-    40%,
+    48%,
     100% {
-      transform: translateY(0) rotate(-3deg);
+      transform: translateY(0) scale(1);
     }
-    20% {
-      transform: translateY(-7px) rotate(3deg);
+    12% {
+      transform: translateY(3px) scale(1.025, 0.975);
+    }
+    26% {
+      transform: translateY(-9px) scale(0.985, 1.02);
+    }
+    38% {
+      transform: translateY(1px) scale(1.01, 0.99);
     }
   }
-  @keyframes ball-bounce {
+  @keyframes swimmer-drift {
     0%,
     100% {
-      transform: translateY(0) scaleY(0.94);
+      transform: translate(0, 0) rotate(0);
     }
-    50% {
-      transform: translateY(-22px) scaleY(1);
+    33% {
+      transform: translate(-6px, -3px) rotate(-3deg);
     }
-  }
-  @keyframes swimmer-bob {
-    0%,
-    100% {
-      transform: translateY(4px) rotate(-4deg);
-    }
-    50% {
-      transform: translateY(-2px) rotate(3deg);
+    68% {
+      transform: translate(3px, 2px) rotate(2deg);
     }
   }
-  @keyframes swimmer-stroke {
+  @keyframes artist-tilt {
     0%,
-    100% {
-      transform: rotate(-10deg);
-    }
-    50% {
-      transform: rotate(18deg);
-    }
-  }
-  @keyframes water-drift {
-    0%,
-    100% {
-      transform: translateX(-4px);
-    }
-    50% {
-      transform: translateX(5px);
-    }
-  }
-  @keyframes artist-paint {
-    0%,
-    45%,
     100% {
       transform: rotate(0);
     }
-    15% {
-      transform: rotate(13deg);
+    25%,
+    45% {
+      transform: rotate(-5deg);
+    }
+    70% {
+      transform: rotate(2deg);
+    }
+  }
+  @keyframes contented-sway {
+    0%,
+    100% {
+      transform: rotate(0) scale(1);
     }
     30% {
-      transform: rotate(-9deg);
+      transform: rotate(3deg) scale(1.015, 0.985);
+    }
+    65% {
+      transform: rotate(-2deg) scale(0.99, 1.01);
     }
   }
-  @keyframes spoon-wave {
+  @keyframes curious-rock {
     0%,
-    55%,
     100% {
       transform: rotate(0);
     }
-    20% {
-      transform: rotate(-17deg);
-    }
     35% {
-      transform: rotate(8deg);
+      transform: rotate(-4deg);
     }
-  }
-  @keyframes foodie-sway {
-    0%,
-    100% {
-      transform: rotate(-2deg);
-    }
-    50% {
-      transform: rotate(3deg);
+    70% {
+      transform: rotate(2deg);
     }
   }
 }
@@ -323,7 +284,7 @@
   }
   .meal-list,
   .activity-list {
-    padding-right: 105px;
+    padding-right: 145px;
   }
 }
 @media (max-width: 767px) {
@@ -352,14 +313,14 @@
     min-height: 275px;
   }
   .card-mascot {
-    width: 150px;
-    height: 137px;
-    right: -17px;
-    bottom: -6px;
+    width: 255px;
+    height: 255px;
+    right: -85px;
+    bottom: -82px;
   }
   .meal-list,
   .activity-list {
-    padding-right: 85px;
+    padding-right: 135px;
   }
   .meal-list {
     gap: 16px;
@@ -369,16 +330,17 @@
     font-size: 14px;
   }
   .empty-day {
-    padding-right: 125px;
+    padding-right: 145px;
     min-height: 225px;
   }
   .empty-day h2 {
     font-size: 22px;
   }
   .empty-day .card-mascot {
-    width: 150px;
-    height: 137px;
-    right: -22px;
+    width: 245px;
+    height: 245px;
+    right: -100px;
+    bottom: -105px;
   }
   .week-row {
     grid-template-columns: 38px minmax(0, 1fr) 54px;
@@ -386,9 +348,10 @@
     padding: 15px 12px;
   }
   .week-row .card-mascot {
-    width: 75px;
-    height: 68px;
-    right: -8px;
+    width: 128px;
+    height: 128px;
+    right: -48px;
+    bottom: -45px;
   }
   .bag-heading {
     padding: 19px 22px;
@@ -406,12 +369,13 @@
   }
   .meal-list,
   .activity-list {
-    padding-right: 70px;
+    padding-right: 110px;
   }
   .card-mascot {
-    width: 132px;
-    height: 120px;
-    right: -19px;
+    width: 220px;
+    height: 220px;
+    right: -80px;
+    bottom: -68px;
   }
   .week-row {
     grid-template-columns: 32px minmax(0, 1fr) 45px;

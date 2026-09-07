@@ -13,7 +13,7 @@ Diari no oficial de l'**Escola Bressol Petits Giraffes (Bruc)**, el grup que a l
 - **Dies tancats i dies especials:** un dia sense escola (festiu, lliure disposició) es marca en terracota, amb un quadrat a la llegenda i el rètol «Escola tancada»; un dia amb escola i alguna cosa especial (taller, biblioteca, casal, celebració) porta un punt ambre. La resta del detall es queda dins del dia.
 - **Dates compartibles:** «Copia el dia», «Copia la setmana» o «Copia el mes» crea un enllaç a la vista seleccionada.
 - **La motxilla:** mostra només els materials indicats a les dades de l'escola, amb la referència del document i la pàgina. Si no n'hi ha, queda buida. Les caselles es desen per data i material en aquest navegador; no hi ha suggeriments ni entrada manual.
-- **Personatges:** el menú té un cuiner; les activitats trien un esportista, un nedador o un artista segons el text. Són il·lustracions SVG originals integrades a les targetes, amb animacions pròpies. La preferència de moviment reduït del sistema les desactiva.
+- **Personatges:** formes orgàniques grans, retallades pels límits de les targetes. Cada personatge té només dos colors suaus i una cara, sense extremitats ni accessoris. El menú té una expressió satisfeta; les activitats trien una expressió esportiva, relaxada o curiosa. Fan un moviment breu en aparèixer i en passar-hi per sobre, i respecten la preferència de moviment reduït.
 - **Tema clar i fosc:** segueix el sistema fins que es tria manualment. Respecta el moviment reduït i permet ampliar el text.
 - **Sense connexió:** després de la primera visita amb connexió, es desen la interfície i les dades. Un avís identifica la còpia desada. Les dades es comproven primer a la xarxa quan hi ha connexió.
 
