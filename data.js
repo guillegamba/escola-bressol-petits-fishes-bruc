@@ -95,20 +95,39 @@
     if (!Object.keys(data).length) throw new Error("CSV: sense dades");
     return data;
   }
+  function isWeekend(date) {
+    return [0, 6].includes(date.getDay());
+  }
   function dayStatus(date, data) {
     return (
-      data[dateKey(date)]?.type ||
-      ([0, 6].includes(date.getDay()) ? "weekend" : "unpublished")
+      data[dateKey(date)]?.type || (isWeekend(date) ? "weekend" : "unpublished")
     );
+  }
+  /* What the family needs to tell apart at a glance: a day the school is shut
+     (bank holiday, free-disposition day), a day it is open with something on
+     (workshop, library, camp, celebration), and an ordinary school day. */
+  function dayKind(date, data) {
+    const status = dayStatus(date, data);
+    if (status === "holiday") return "closed";
+    if (status !== "school") return status;
+    return data[dateKey(date)].label ? "special" : "school";
+  }
+  /* This is a school diary, so a week is Monday to Friday. A weekend day joins
+     it only when the school published an explicit row for it. */
+  function schoolDates(date, data = {}) {
+    return weekDates(date).filter((d, i) => i < 5 || data[dateKey(d)]);
   }
   const api = {
     dateKey,
     parseDate,
     addDays,
     weekDates,
+    schoolDates,
     parseRows,
     parseCalendar,
     dayStatus,
+    dayKind,
+    isWeekend,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.DiaryData = api;

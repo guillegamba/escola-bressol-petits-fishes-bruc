@@ -1,8 +1,15 @@
 /* The diary remains build-free and all published schedules live in calendar.csv. */
 (() => {
   "use strict";
-  const { dateKey, parseDate, addDays, weekDates, parseCalendar, dayStatus } =
-    DiaryData;
+  const {
+    dateKey,
+    parseDate,
+    addDays,
+    schoolDates,
+    parseCalendar,
+    dayKind,
+    isWeekend,
+  } = DiaryData;
   const $ = (id) => document.getElementById(id);
   const escape = (value) =>
     String(value).replace(
@@ -34,15 +41,16 @@
   const initialParams = new URLSearchParams(location.search);
   const state = {
     selected: parseDate(initialParams.get("date")) || today(),
-    view: initialParams.get("view") === "week" ? "week" : "day",
+    view: ["week", "month"].includes(initialParams.get("view"))
+      ? initialParams.get("view")
+      : "day",
     data: {},
     loaded: false,
     failed: false,
     stale: false,
-    calendarMonth: today(),
   };
   let toastTimer,
-    lastCalendarTrigger,
+    pendingFocus,
     refreshing = false;
   const FIRST_DATE = new Date(1900, 0, 1, 12),
     LAST_DATE = new Date(2100, 11, 31, 12);
@@ -75,15 +83,42 @@
   function updateUrl() {
     const url = new URL(location.href);
     url.searchParams.set("date", dateKey(state.selected));
-    if (state.view === "week") url.searchParams.set("view", "week");
-    else url.searchParams.delete("view");
+    if (state.view === "day") url.searchParams.delete("view");
+    else url.searchParams.set("view", state.view);
     history.replaceState(null, "", url);
   }
+  const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+  const addMonths = (date, count) => {
+    const year = date.getFullYear(),
+      month = date.getMonth() + count;
+    return new Date(
+      year,
+      month,
+      Math.min(date.getDate(), daysInMonth(year, month)),
+      12,
+    );
+  };
   function select(date, view = state.view) {
     state.selected = clampDate(date);
     state.view = view;
     updateUrl();
     render();
+  }
+  /* Weekends live only in the month grid, so they join a week strip or list
+     when the school published a row for one, or when one is the day on screen. */
+  function weekViewDates() {
+    const dates = schoolDates(state.selected, state.data);
+    return dates.some((date) => dateKey(date) === dateKey(state.selected))
+      ? dates
+      : [...dates, state.selected].sort((a, b) => a - b);
+  }
+  const selectable = (date) => !isWeekend(date) || !!state.data[dateKey(date)];
+  /* Friday's next day is Monday. */
+  function nextSchoolDay(from, direction) {
+    let next = addDays(from, direction);
+    for (let i = 0; i < 7 && !selectable(next); i++)
+      next = addDays(next, direction);
+    return next;
   }
   function setTheme(theme) {
     document.documentElement.dataset.theme = theme;
@@ -119,40 +154,45 @@
         now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
     $("course-label").textContent =
       `Curs ${startYear}/${String(startYear + 1).slice(-2)}`;
-    $("daily-btn").setAttribute("aria-pressed", state.view === "day");
-    $("weekly-btn").setAttribute("aria-pressed", state.view === "week");
+    for (const [id, view] of [
+      ["daily-btn", "day"],
+      ["weekly-btn", "week"],
+      ["monthly-btn", "month"],
+    ])
+      $(id).setAttribute("aria-pressed", state.view === view);
+    const month = state.view === "month",
+      week = weekViewDates();
     $("date-context").textContent =
-      state.view === "week"
+      month || state.view === "week"
         ? String(state.selected.getFullYear())
         : capitalize(format(state.selected, { weekday: "long" }));
-    const week = weekDates(state.selected);
-    $("date-title").textContent =
-      state.view === "week"
-        ? `${format(week[0], { day: "numeric", month: "short" })} - ${format(week[6], { day: "numeric", month: "short" })}`
+    $("date-title").textContent = month
+      ? capitalize(format(state.selected, { month: "long" }))
+      : state.view === "week"
+        ? `${format(week[0], { day: "numeric", month: "short" })} - ${format(week.at(-1), { day: "numeric", month: "short" })}`
         : format(state.selected, { day: "numeric", month: "long" });
     $("date-title").setAttribute(
       "aria-label",
-      format(state.selected, { dateStyle: "full" }),
+      month
+        ? format(state.selected, { month: "long", year: "numeric" })
+        : format(state.selected, { dateStyle: "full" }),
     );
-    $("prev-day-btn").setAttribute(
-      "aria-label",
-      state.view === "week" ? "Setmana anterior" : "Dia anterior",
-    );
-    $("next-day-btn").setAttribute(
-      "aria-label",
-      state.view === "week" ? "Setmana següent" : "Dia següent",
-    );
+    const unit = month ? "Mes" : state.view === "week" ? "Setmana" : "Dia";
+    $("prev-day-btn").setAttribute("aria-label", `${unit} anterior`);
+    $("next-day-btn").setAttribute("aria-label", `${unit} següent`);
     $("prev-day-btn").disabled = state.selected <= FIRST_DATE;
     $("next-day-btn").disabled = state.selected >= LAST_DATE;
-    $("week-strip").innerHTML = week
-      .map((date) => {
-        const key = dateKey(date),
-          status = dayStatus(date, state.data);
-        return `<button class="week-day ${key === dateKey(now) ? "is-today" : ""} ${state.data[key] ? "has-data" : ""} ${status === "holiday" ? "is-holiday" : ""}" data-date="${key}" aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(now) ? 'aria-current="date"' : ""} aria-label="${shortDay(date)} ${date.getDate()}, ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></button>`;
-      })
-      .join("");
+    $("week-strip").hidden = month;
+    $("week-strip").innerHTML = month
+      ? ""
+      : week
+          .map((date) => {
+            const key = dateKey(date);
+            return `<button class="week-day kind-${dayKind(date, state.data)} ${key === dateKey(now) ? "is-today" : ""}" data-date="${key}" aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(now) ? 'aria-current="date"' : ""} aria-label="${shortDay(date)} ${date.getDate()}, ${escape(format(date, { dateStyle: "full" }))}"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></button>`;
+          })
+          .join("");
     $("share-btn").innerHTML =
-      `${icon("link")}Copia ${state.view === "week" ? "la setmana" : "el dia"}`;
+      `${icon("link")}Copia ${month ? "el mes" : state.view === "week" ? "la setmana" : "el dia"}`;
     const keys = publishedKeys();
     $("data-range").textContent = keys.length
       ? `Dades: ${format(parseDate(keys[0]), { month: "short" })} - ${format(parseDate(keys.at(-1)), { month: "short", year: "numeric" })}`
@@ -182,55 +222,87 @@
     const song = SONGS_BY_MONTH[key.slice(0, 7)];
     return `${escape(text)}${song && text.toLowerCase().includes("cançó") ? `<br><a class="song-link" href="${song}" target="_blank" rel="noreferrer">${icon("play")}Escolta la cançó</a>` : ""}`;
   }
+  const KIND_TEXT = {
+    closed: "escola tancada",
+    special: "dia especial",
+    school: "amb programació",
+    weekend: "cap de setmana",
+    unpublished: "programació pendent",
+  };
   const { character, forActivities } = DiaryCharacters;
   function renderDay() {
     const key = dateKey(state.selected),
       row = state.data[key],
-      status = dayStatus(state.selected, state.data);
-    if (status === "school") {
+      kind = dayKind(state.selected, state.data);
+    if (kind === "school" || kind === "special") {
       const mealLabels = ["Primer plat", "Segon plat", "Per acabar"];
-      return `${row.label ? `<div class="special-day">${icon("party-popper")}<span>${escape(row.label)}</span></div>` : ""}<div class="day-cards"><section class="diary-card menu-card">${character("foodie")}<div class="card-heading"><span>${icon("utensils")}</span><h2>Menú</h2></div>${row.menu.length ? `<ol class="meal-list">${row.menu.map((meal, i) => `<li><span class="meal-number" aria-hidden="true">${i + 1}</span><div>${mealLabels[i] ? `<span class="meal-label">${mealLabels[i]}</span>` : ""}<span class="meal-text">${escape(meal)}</span></div></li>`).join("")}</ol>` : "<p>Menú pendent de publicar.</p>"}</section><section class="diary-card activities-card personality-${forActivities(row.activities)}">${character(forActivities(row.activities))}<div class="card-heading"><span>${icon("shapes")}</span><h2>Activitats</h2></div>${row.activities.length ? `<ul class="activity-list">${row.activities.map((text) => `<li>${activity(text, key)}</li>`).join("")}</ul>` : "<p>Activitats pendents de publicar.</p>"}</section></div>`;
+      return `${row.label ? `<div class="day-flag is-special">${icon("party-popper")}<span>${escape(row.label)}</span></div>` : ""}<div class="day-cards"><section class="diary-card menu-card">${character("foodie")}<div class="card-heading"><span>${icon("utensils")}</span><h2>Menú</h2></div>${row.menu.length ? `<ol class="meal-list">${row.menu.map((meal, i) => `<li><span class="meal-number" aria-hidden="true">${i + 1}</span><div>${mealLabels[i] ? `<span class="meal-label">${mealLabels[i]}</span>` : ""}<span class="meal-text">${escape(meal)}</span></div></li>`).join("")}</ol>` : "<p>Menú pendent de publicar.</p>"}</section><section class="diary-card activities-card personality-${forActivities(row.activities)}">${character(forActivities(row.activities))}<div class="card-heading"><span>${icon("shapes")}</span><h2>Activitats</h2></div>${row.activities.length ? `<ul class="activity-list">${row.activities.map((text) => `<li>${activity(text, key)}</li>`).join("")}</ul>` : "<p>Activitats pendents de publicar.</p>"}</section></div>`;
     }
-    const title =
-      status === "holiday"
-        ? row.label || "Dia festiu"
-        : status === "weekend"
-          ? "Cap de setmana"
-          : "Programació pendent";
-    const body =
-      status === "holiday"
-        ? "Gaudiu del dia lliure!"
-        : status === "weekend"
-          ? ""
-          : "Encara no hi ha menú ni activitats publicats per a aquest dia. Torna-hi més endavant.";
-    return `<section class="empty-day ${status}">${character(status === "weekend" ? "swimmer" : "artist")}<span class="empty-icon">${icon(status === "unpublished" ? "sprout" : status === "weekend" ? "sun" : "party-popper")}</span><h2>${escape(title)}</h2><p>${body}</p>${status === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
+    const closed = kind === "closed";
+    const title = closed
+      ? row.label || "Dia festiu"
+      : kind === "weekend"
+        ? "Cap de setmana"
+        : "Programació pendent";
+    const body = closed
+      ? "Gaudiu del dia lliure!"
+      : kind === "weekend"
+        ? ""
+        : "Encara no hi ha menú ni activitats publicats per a aquest dia. Torna-hi més endavant.";
+    return `<section class="empty-day ${kind}">${character(kind === "weekend" ? "swimmer" : "artist")}<span class="empty-icon">${icon(kind === "unpublished" ? "sprout" : kind === "weekend" ? "sun" : "door-closed")}</span>${closed ? '<span class="day-flag is-closed">Escola tancada</span>' : ""}<h2>${escape(title)}</h2><p>${body}</p>${kind === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
   }
   function renderWeek() {
-    return `<div class="week-list">${weekDates(state.selected)
+    return `<div class="week-list">${weekViewDates()
       .map((date) => {
         const key = dateKey(date),
           row = state.data[key],
-          status = dayStatus(date, state.data);
+          kind = dayKind(date, state.data),
+          open = kind === "school" || kind === "special";
         let title, detail;
-        if (status === "school") {
+        if (open) {
           title = row.menu.join(" · ") || "Menú pendent de publicar";
           detail =
             row.activities.join(" · ") || "Activitats pendents de publicar";
         } else {
           title =
-            status === "holiday"
+            kind === "closed"
               ? row.label || "Dia festiu"
-              : status === "weekend"
+              : kind === "weekend"
                 ? "Cap de setmana"
                 : "Programació pendent";
           detail =
-            status === "unpublished"
-              ? "Encara no hi ha menú ni activitats."
-              : "Gaudiu del dia lliure!";
+            kind === "closed"
+              ? "Escola tancada"
+              : kind === "weekend"
+                ? "Gaudiu del dia lliure!"
+                : "Encara no hi ha menú ni activitats.";
         }
-        return `<button class="week-row ${status !== "school" ? "free" : ""} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span class="week-date"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></span><span class="week-summary">${status === "school" && row.label ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${status === "school" ? character(forActivities(row.activities), true) : icon("chevron-right")}</button>`;
+        return `<button class="week-row kind-${kind} ${open ? "" : "free"} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}"><span class="week-date"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></span><span class="week-summary">${kind === "special" ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${open ? character(forActivities(row.activities), true) : icon("chevron-right")}</button>`;
       })
       .join("")}</div>`;
+  }
+  function renderMonth() {
+    const y = state.selected.getFullYear(),
+      m = state.selected.getMonth(),
+      offset = (new Date(y, m, 1).getDay() + 6) % 7;
+    let cells = '<span aria-hidden="true"></span>'.repeat(offset);
+    for (let d = 1; d <= daysInMonth(y, m); d++) {
+      const date = new Date(y, m, d, 12),
+        key = dateKey(date),
+        kind = dayKind(date, state.data);
+      // Weekends stay visible for orientation but are not selectable. They keep
+      // focus so the arrow keys can still cross them.
+      cells += `<button class="calendar-day kind-${kind}" data-date="${key}" ${kind === "weekend" ? 'aria-disabled="true"' : ""} aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(today()) ? 'aria-current="date"' : ""} aria-label="${escape(format(date, { dateStyle: "full" }))}, ${KIND_TEXT[kind]}">${d}</button>`;
+    }
+    return `<div class="month-view"><div class="calendar-weekdays" aria-hidden="true"><span>dl</span><span>dt</span><span>dc</span><span>dj</span><span>dv</span><span>ds</span><span>dg</span></div><div class="calendar-grid">${cells}</div><p class="calendar-legend">${[
+      ["closed", "Escola tancada"],
+      ["special", "Dia especial"],
+      ["school", "Amb programació"],
+    ]
+      .map(
+        ([kind, text]) => `<span><b class="marker-${kind}"></b>${text}</span>`,
+      )
+      .join("")}</p></div>`;
   }
   function render() {
     renderHeader();
@@ -238,7 +310,11 @@
     renderChecklist();
     if (state.loaded)
       $("main-container").innerHTML =
-        state.view === "week" ? renderWeek() : renderDay();
+        state.view === "month"
+          ? renderMonth()
+          : state.view === "week"
+            ? renderWeek()
+            : renderDay();
     else if (state.failed)
       $("main-container").innerHTML =
         `<section class="empty-day unpublished"><span class="empty-icon">${icon("cloud-off")}</span><h2>No hem pogut carregar el diari.</h2><p>Comprova la connexió i torna-ho a provar.</p><button class="text-button" data-action="refresh">Torna-ho a provar</button></section>`;
@@ -247,6 +323,12 @@
       !state.loaded && !state.failed,
     );
     icons();
+    if (pendingFocus) {
+      $("main-container")
+        .querySelector(`[data-date="${pendingFocus}"]`)
+        ?.focus();
+      pendingFocus = null;
+    }
   }
   function archive() {
     const key = publishedKeys().at(-1);
@@ -303,8 +385,15 @@
   $("weekly-btn").addEventListener("click", () =>
     select(state.selected, "week"),
   );
-  const move = (delta) =>
-    select(addDays(state.selected, delta * (state.view === "week" ? 7 : 1)));
+  $("monthly-btn").addEventListener("click", () =>
+    select(state.selected, "month"),
+  );
+  function move(delta) {
+    if (state.view === "month") return select(addMonths(state.selected, delta));
+    if (state.view === "week")
+      return select(addDays(state.selected, delta * 7));
+    select(nextSchoolDay(state.selected, delta));
+  }
   $("prev-day-btn").addEventListener("click", () => move(-1));
   $("next-day-btn").addEventListener("click", () => move(1));
   $("week-strip").addEventListener("click", (e) => {
@@ -316,6 +405,12 @@
     if (weekBtn) {
       select(parseDate(weekBtn.dataset.weekDate), "day");
       $("daily-btn").focus();
+    }
+    const monthBtn = e.target.closest("[data-date]");
+    if (monthBtn && $("main-container").contains(monthBtn)) {
+      if (monthBtn.getAttribute("aria-disabled") !== "true")
+        select(parseDate(monthBtn.dataset.date), "day");
+      return;
     }
     const action = e.target.closest("[data-action]")?.dataset.action;
     if (action === "archive") {
@@ -361,106 +456,14 @@
   $("main-container").addEventListener("touchcancel", () => {
     touch = null;
   });
-
-  // Native dialog supplies modal semantics, Escape and a keyboard focus trap.
-  function renderCalendar(focusDate) {
-    const month = state.calendarMonth,
-      y = month.getFullYear(),
-      m = month.getMonth();
-    $("calendar-month").textContent = format(month, {
-      month: "long",
-      year: "numeric",
-    });
-    $("prev-month").disabled = y === 1900 && m === 0;
-    $("next-month").disabled = y === 2100 && m === 11;
-    $("last-published").disabled = !state.loaded;
-    const offset = (new Date(y, m, 1).getDay() + 6) % 7;
-    let html = '<span aria-hidden="true"></span>'.repeat(offset);
-    for (let d = 1; d <= new Date(y, m + 1, 0).getDate(); d++) {
-      const date = new Date(y, m, d, 12),
-        key = dateKey(date),
-        row = state.data[key];
-      html += `<button class="calendar-day ${row ? "has-data" : ""} ${row?.type === "holiday" ? "is-holiday" : ""}" data-date="${key}" aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(today()) ? 'aria-current="date"' : ""} aria-label="${escape(format(date, { dateStyle: "full" }))}${row?.type === "holiday" ? ", festiu" : row ? ", amb programació" : ""}">${d}</button>`;
-    }
-    $("calendar-grid").innerHTML = html;
-    if (focusDate)
-      $("calendar-grid")
-        .querySelector(`[data-date="${dateKey(focusDate)}"]`)
-        ?.focus();
-    icons();
-  }
-  $("calendar-toggle-btn").addEventListener("click", () => {
-    lastCalendarTrigger = document.activeElement;
-    state.calendarMonth = new Date(
-      state.selected.getFullYear(),
-      state.selected.getMonth(),
-      1,
-      12,
-    );
-    renderCalendar();
-    $("calendar-dialog").showModal();
-    $("calendar-grid")
-      .querySelector(`[data-date="${dateKey(state.selected)}"]`)
-      ?.focus();
-  });
-  const closeCalendar = () => $("calendar-dialog").close();
-  $("close-calendar").addEventListener("click", closeCalendar);
-  $("calendar-dialog").addEventListener("close", () =>
-    lastCalendarTrigger?.focus(),
-  );
-  $("calendar-dialog").addEventListener("click", (e) => {
-    if (e.target === $("calendar-dialog")) {
-      const rect = e.target.getBoundingClientRect();
-      if (
-        e.clientX < rect.left ||
-        e.clientX > rect.right ||
-        e.clientY < rect.top ||
-        e.clientY > rect.bottom
-      )
-        closeCalendar();
-    }
-  });
-  $("prev-month").addEventListener("click", () => {
-    state.calendarMonth = new Date(
-      state.calendarMonth.getFullYear(),
-      state.calendarMonth.getMonth() - 1,
-      1,
-      12,
-    );
-    renderCalendar();
-  });
-  $("next-month").addEventListener("click", () => {
-    state.calendarMonth = new Date(
-      state.calendarMonth.getFullYear(),
-      state.calendarMonth.getMonth() + 1,
-      1,
-      12,
-    );
-    renderCalendar();
-  });
-  $("calendar-grid").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-date]");
-    if (btn) {
-      select(parseDate(btn.dataset.date), "day");
-      closeCalendar();
-    }
-  });
-  $("calendar-grid").addEventListener("keydown", (e) => {
-    const date = parseDate(e.target.dataset.date);
+  $("main-container").addEventListener("keydown", (e) => {
     const deltas = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
-    if (!date || !(e.key in deltas)) return;
+    const date = parseDate(e.target.dataset?.date);
+    if (state.view !== "month" || !date || !(e.key in deltas)) return;
     e.preventDefault();
     const next = clampDate(addDays(date, deltas[e.key]));
-    state.calendarMonth = new Date(next.getFullYear(), next.getMonth(), 1, 12);
-    renderCalendar(next);
-  });
-  $("calendar-today").addEventListener("click", () => {
-    select(today(), "day");
-    closeCalendar();
-  });
-  $("last-published").addEventListener("click", () => {
-    archive();
-    closeCalendar();
+    pendingFocus = dateKey(next);
+    select(next);
   });
 
   // School-supplied requirements only. Old personal suggestions are not imported.
@@ -473,8 +476,7 @@
       : {};
   const itemId = (key, text) => `${key}:${text}`;
   function suppliedDays() {
-    const dates =
-      state.view === "week" ? weekDates(state.selected) : [state.selected];
+    const dates = state.view === "week" ? weekViewDates() : [state.selected];
     return dates
       .map((date) => ({
         date,
@@ -528,33 +530,14 @@
     saveChecklist();
     renderChecklist();
   });
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  let pauseMotion = saved("fishes-motion-paused", false) === true;
-  function syncMotion() {
-    const paused = pauseMotion || reducedMotion.matches;
-    document.documentElement.dataset.motion = paused ? "paused" : "playing";
-    $("motion-btn").setAttribute("aria-pressed", String(paused));
-    $("motion-btn").setAttribute(
-      "aria-label",
-      paused ? "Activa les animacions" : "Atura les animacions",
-    );
-    $("motion-btn").innerHTML = icon(paused ? "play" : "pause");
-    $("motion-btn").hidden = reducedMotion.matches;
-    icons();
-  }
-  $("motion-btn").addEventListener("click", () => {
-    pauseMotion = !pauseMotion;
-    persist("fishes-motion-paused", pauseMotion);
-    syncMotion();
-  });
-  reducedMotion.addEventListener("change", syncMotion);
-  syncMotion();
   window.addEventListener("online", () => loadData());
   window.addEventListener("offline", connectionStatus);
   window.addEventListener("popstate", () => {
     const params = new URLSearchParams(location.search);
     state.selected = parseDate(params.get("date")) || today();
-    state.view = params.get("view") === "week" ? "week" : "day";
+    state.view = ["week", "month"].includes(params.get("view"))
+      ? params.get("view")
+      : "day";
     render();
   });
   document.addEventListener("visibilitychange", () => {

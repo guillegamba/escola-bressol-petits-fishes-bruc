@@ -38,12 +38,13 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     /Patata estofada amb verdures/,
   );
   assert.match(
-    await page.locator(".special-day").textContent(),
+    await page.locator(".day-flag.is-special").textContent(),
     /Inici de curs/,
   );
   assert.equal(await page.locator("#schedule-status").textContent(), "");
   await page.locator("#weekly-btn").click();
-  assert.equal(await page.locator(".week-row").count(), 7);
+  assert.equal(await page.locator(".week-row").count(), 5);
+  assert.equal(await page.locator(".week-row.kind-weekend").count(), 0);
   assert.equal(
     await page
       .locator(".week-row")
@@ -58,29 +59,68 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .count(),
     1,
   );
+  assert.equal(await page.locator(".week-row.kind-closed").count(), 1);
   await page.locator('[data-week-date="2026-09-07"]').click();
   assert.equal(
     await page.locator("#daily-btn").getAttribute("aria-pressed"),
     "true",
   );
-  await page.locator("#calendar-toggle-btn").click();
+  await page.locator("#monthly-btn").click();
+  assert.equal(await page.locator(".month-view").count(), 1);
+  assert.equal(await page.locator("#week-strip").isVisible(), false);
+  assert.match(await page.locator("#date-title").textContent(), /Setembre/);
+  assert.equal(await page.locator(".calendar-legend > span").count(), 3);
+  // Closures read as blocks, special days as dots, weekends greyed and inert.
+  assert.equal(await page.locator(".calendar-day.kind-closed").count(), 3);
+  assert.equal(await page.locator(".calendar-day.kind-special").count(), 7);
   assert.equal(
-    await page.locator("#calendar-dialog").evaluate((e) => e.open),
-    true,
+    await page.locator('.calendar-day[aria-disabled="true"]').count(),
+    8,
   );
+  // Playwright refuses a normal click on an inert cell, so force one through
+  // and confirm the view did not move.
+  await page
+    .locator('.calendar-day[data-date="2026-09-05"]')
+    .dispatchEvent("click");
+  assert.equal(
+    await page.locator("#monthly-btn").getAttribute("aria-pressed"),
+    "true",
+  );
+  // Arrow keys still cross the weekend, and pull in the neighbouring month.
+  await page.locator('.calendar-day[data-date="2026-09-01"]').focus();
   await page.keyboard.press("ArrowLeft");
   assert.equal(
     await page.evaluate(() => document.activeElement.dataset.date),
-    "2026-09-06",
+    "2026-08-31",
   );
-  await page.keyboard.press("Escape");
-  assert.equal(
-    await page.locator("#calendar-dialog").evaluate((e) => e.open),
-    false,
+  assert.match(await page.locator("#date-title").textContent(), /Agost/);
+  await page.locator("#prev-day-btn").click();
+  assert.match(await page.locator("#date-title").textContent(), /Juliol/);
+  // A month-view URL opens on that month, not on today's.
+  await page.goto(base + "?date=2026-07-31&view=month");
+  await page.locator(".month-view").waitFor();
+  assert.match(await page.locator("#date-title").textContent(), /Juliol/);
+  assert.match(
+    await page.locator("#schedule-status").textContent(),
+    /juliol del 2026|^$/,
   );
+  await page.locator('.calendar-day[data-date="2026-07-31"]').click();
+  assert.match(await page.locator("#date-title").textContent(), /31 de juliol/);
   assert.equal(
-    await page.evaluate(() => document.activeElement.id),
-    "calendar-toggle-btn",
+    await page.locator("#daily-btn").getAttribute("aria-pressed"),
+    "true",
+  );
+  await page.goto(base + "?date=2026-09-18");
+  await page.locator(".menu-card").waitFor();
+  await page.locator("#next-day-btn").click();
+  assert.match(
+    await page.locator("#date-title").textContent(),
+    /21 de setembre/,
+  );
+  await page.locator("#prev-day-btn").click();
+  assert.match(
+    await page.locator("#date-title").textContent(),
+    /18 de setembre/,
   );
   // November holds course-calendar rows (a closure, a free-disposition day) but
   // no programme, so the month still reads as pending.
@@ -187,12 +227,12 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     path: path.join(artifacts, "dark-final.png"),
     fullPage: true,
   });
-  await page.locator("#calendar-toggle-btn").click();
+  await page.locator("#monthly-btn").click();
   await page.screenshot({
     path: path.join(artifacts, "calendar-final.png"),
     fullPage: true,
   });
-  await page.keyboard.press("Escape");
+  await page.locator("#daily-btn").click();
   await page.locator("#theme-btn").click();
   await page.locator("#weekly-btn").click();
   await page.screenshot({
@@ -209,20 +249,6 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .evaluate((el) => getComputedStyle(el).animationName),
     "ball-bounce",
   );
-  await page.locator("#motion-btn").click();
-  assert.equal(
-    await page
-      .locator(".mascot-ball")
-      .evaluate((el) => getComputedStyle(el).animationName),
-    "none",
-  );
-  await page.reload();
-  await page.locator(".menu-card").waitFor();
-  assert.equal(
-    await page.locator("#motion-btn").getAttribute("aria-pressed"),
-    "true",
-  );
-  await page.locator("#motion-btn").click();
   await page.emulateMedia({ reducedMotion: "reduce" });
   assert.equal(
     await page
@@ -230,9 +256,10 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .evaluate((el) => getComputedStyle(el).animationName),
     "none",
   );
-  await page.locator("#motion-btn").waitFor({ state: "hidden" });
   assert.equal(
-    await page.locator(".welcome,.family-note,#checklist-form").count(),
+    await page
+      .locator("#motion-btn, .welcome, .family-note, #checklist-form")
+      .count(),
     0,
   );
   await page.route("**/calendar.csv", (r) =>
@@ -244,7 +271,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     .waitFor();
   assert.equal(errors.length, 0, JSON.stringify(errors));
   console.log(
-    "PASS: current date; published September; pending month with calendar-only rows; week view; archive; modal keyboard/focus; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
+    "PASS: current date; published September; pending month with calendar-only rows; Mon-Fri week view; month view keyboard and inert weekends; weekend-skipping day arrows; archive; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
   );
   await context.close();
   // Real service worker: cache installation, immediate fresh data, offline shared URLs.
