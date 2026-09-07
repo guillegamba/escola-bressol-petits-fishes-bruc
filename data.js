@@ -54,13 +54,25 @@
   }
   function parseCalendar(text) {
     const rows = parseRows(text);
-    if (rows.shift()?.join(",") !== "Date,Type,Label,Activities,Menu")
+    const header = rows.shift()?.join(",");
+    const withSupplies =
+      header === "Date,Type,Label,Activities,Menu,Supplies,SupplySource";
+    if (!withSupplies && header !== "Date,Type,Label,Activities,Menu")
       throw new Error("CSV: capçalera incorrecta");
     const data = {};
     for (const row of rows) {
-      const [key, type, label, activities, menu] = row;
+      const [
+        key,
+        type,
+        label,
+        activities,
+        menu,
+        supplies = "",
+        supplySource = "",
+      ] = row;
       if (
-        row.length !== 5 ||
+        row.length !== (withSupplies ? 7 : 5) ||
+        (supplies.trim() && !supplySource.trim()) ||
         !parseDate(key) ||
         !["school", "holiday"].includes(type) ||
         data[key]
@@ -76,6 +88,8 @@
         label,
         activities: list(activities),
         menu: list(menu),
+        supplies: [...new Set(list(supplies))],
+        supplySource,
       };
     }
     if (!Object.keys(data).length) throw new Error("CSV: sense dades");

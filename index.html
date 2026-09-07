@@ -6,7 +6,7 @@
     <title>Escola Bressol Petits Fishes (Bruc) - Diari</title>
     <meta
       name="description"
-      content="El menú, les activitats i la teva llista per preparar el dia a Fishes Bruc. Diari no oficial per a famílies."
+      content="El menú, les activitats i els materials indicats per l’escola. Diari no oficial per a famílies."
     />
     <link rel="icon" href="./favicon.png" />
     <link rel="manifest" href="./manifest.json" />
@@ -16,6 +16,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Fishes Bruc" />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./characters.css" />
     <link
       rel="preload"
       href="./assets/nunito-latin.woff2"
@@ -25,6 +26,7 @@
     />
     <script defer src="./assets/lucide.min.js"></script>
     <script defer src="./data.js"></script>
+    <script defer src="./characters.js"></script>
     <script defer src="./script.js"></script>
     <script>
       window.va =
@@ -45,36 +47,25 @@
   <body>
     <a class="skip-link" href="#diary">Salta al diari</a>
     <header class="site-header shell">
-      <a
-        class="brand"
-        href="./"
-        aria-label="Escola Bressol Petits Fishes Bruc, inici"
+      <a class="brand" href="./"
         ><span class="brand-kicker">Escola Bressol Petits</span
         ><span class="brand-name">Fishes Bruc</span></a
       >
       <div class="header-actions">
-        <span class="course" id="course-label"></span
+        <button
+          class="icon-button"
+          id="motion-btn"
+          aria-label="Atura les animacions"
+          aria-pressed="false"
+        >
+          <i data-lucide="pause"></i></button
+        ><span class="course" id="course-label"></span
         ><button class="icon-button" id="theme-btn" aria-label="Canvia el tema">
           <i data-lucide="sun-moon"></i>
         </button>
       </div>
     </header>
     <main class="shell">
-      <section class="welcome" aria-labelledby="welcome-title">
-        <div class="welcome-copy">
-          <span class="welcome-note">Hola, famílies!</span>
-          <h1 id="welcome-title">Petits dies,<br />grans aventures.</h1>
-          <p>El seu dia, una mica més a prop.</p>
-        </div>
-        <img
-          class="companions"
-          src="./assets/companions.webp"
-          width="1000"
-          height="667"
-          alt="Tres personatges rodons, groc, verd i rosa, ens saluden"
-          fetchpriority="high"
-        />
-      </section>
       <div
         id="connection-status"
         class="connection-status"
@@ -107,8 +98,8 @@
           </div>
           <div class="date-heading">
             <div>
-              <p class="date-context" id="date-context">El nostre dia</p>
-              <h2 id="date-title">Carregant el diari…</h2>
+              <p class="date-context" id="date-context"></p>
+              <h1 id="date-title">Carregant el diari…</h1>
             </div>
             <div class="day-arrows">
               <button
@@ -145,39 +136,15 @@
             </button>
           </div>
         </section>
-        <aside class="preparation" aria-label="Preparació personal">
-          <details id="bag-panel" open>
-            <summary>
-              <span class="bag-icon"><i data-lucide="backpack"></i></span
-              ><span
-                ><span class="aside-kicker">A punt per demà</span
-                ><span class="aside-title">La motxilla</span></span
-              ><i data-lucide="chevron-down" class="disclosure-icon"></i>
-            </summary>
-            <div class="bag-body">
-              <p>
-                Una cosa menys al cap.<br />Prepara la teva llista i som-hi!
-              </p>
-              <p class="local-note">Només es desa en aquest dispositiu.</p>
+        <aside class="preparation" aria-labelledby="bag-title">
+          <section id="bag-panel" class="bag-panel">
+            <div class="bag-heading">
+              <span class="bag-icon"><i data-lucide="backpack"></i></span>
+              <h2 id="bag-title" class="aside-title">La motxilla</h2>
+              <span id="bag-count" hidden></span>
+            </div>
+            <div class="bag-body" id="bag-content" hidden>
               <div id="checklist"></div>
-              <form id="checklist-form">
-                <label class="sr-only" for="new-item"
-                  >Afegeix una cosa a la motxilla</label
-                ><input
-                  id="new-item"
-                  name="item"
-                  maxlength="80"
-                  placeholder="Què més ens falta?"
-                  autocomplete="off"
-                  required
-                /><button
-                  class="icon-button"
-                  type="submit"
-                  aria-label="Afegeix a la llista"
-                >
-                  <i data-lucide="plus"></i>
-                </button>
-              </form>
               <div class="checklist-bottom">
                 <span id="checklist-progress" role="status"></span
                 ><button class="text-button" id="reset-list">Desmarca</button>
@@ -189,18 +156,12 @@
                 hidden
               ></p>
             </div>
-          </details>
-          <div class="family-note">
-            <i data-lucide="heart"></i>
-            <p>Cada petit pas<br />és una gran aventura.</p>
-            <span>Al seu ritme. Sempre.</span>
-          </div>
+          </section>
         </aside>
       </div>
     </main>
     <footer class="site-footer shell">
-      <span>Fet amb cura, per a les famílies.</span
-      ><span>🥸 no oficial - pot contenir errors</span>
+      <span>🥸 no oficial - pot contenir errors</span>
     </footer>
     <dialog id="calendar-dialog" aria-labelledby="calendar-title">
       <div class="dialog-heading">

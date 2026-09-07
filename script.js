@@ -121,13 +121,10 @@
       `Curs ${startYear}/${String(startYear + 1).slice(-2)}`;
     $("daily-btn").setAttribute("aria-pressed", state.view === "day");
     $("weekly-btn").setAttribute("aria-pressed", state.view === "week");
-    const sameDay = dateKey(state.selected) === dateKey(now);
     $("date-context").textContent =
       state.view === "week"
-        ? "La setmana, d’una ullada"
-        : sameDay
-          ? "Avui, al nostre ritme"
-          : capitalize(format(state.selected, { weekday: "long" }));
+        ? String(state.selected.getFullYear())
+        : capitalize(format(state.selected, { weekday: "long" }));
     const week = weekDates(state.selected);
     $("date-title").textContent =
       state.view === "week"
@@ -151,7 +148,7 @@
       .map((date) => {
         const key = dateKey(date),
           status = dayStatus(date, state.data);
-        return `<button class="week-day ${key === dateKey(now) ? "is-today" : ""} ${state.data[key] ? "has-data" : ""} ${status === "holiday" ? "is-holiday" : ""}" data-date="${key}" aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(now) ? 'aria-current="date"' : ""} aria-label="${shortDay(date)} ${date.getDate()}, ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span>${shortDay(date)}</span><strong>${date.getDate()}</strong></button>`;
+        return `<button class="week-day ${key === dateKey(now) ? "is-today" : ""} ${state.data[key] ? "has-data" : ""} ${status === "holiday" ? "is-holiday" : ""}" data-date="${key}" aria-pressed="${key === dateKey(state.selected)}" ${key === dateKey(now) ? 'aria-current="date"' : ""} aria-label="${shortDay(date)} ${date.getDate()}, ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></button>`;
       })
       .join("");
     $("share-btn").innerHTML =
@@ -173,27 +170,28 @@
     const song = SONGS_BY_MONTH[key.slice(0, 7)];
     return `${escape(text)}${song && text.toLowerCase().includes("cançó") ? `<br><a class="song-link" href="${song}" target="_blank" rel="noreferrer">${icon("play")}Escolta la cançó</a>` : ""}`;
   }
+  const { character, forActivities } = DiaryCharacters;
   function renderDay() {
     const key = dateKey(state.selected),
       row = state.data[key],
       status = dayStatus(state.selected, state.data);
     if (status === "school") {
       const mealLabels = ["Primer plat", "Segon plat", "Per acabar"];
-      return `${row.label ? `<div class="special-day">${icon("party-popper")}<span>${escape(row.label)}</span></div>` : ""}<div class="day-cards"><section class="diary-card menu-card"><div class="card-heading"><span>${icon("utensils")}</span><h3>Menú</h3></div>${row.menu.length ? `<ol class="meal-list">${row.menu.map((meal, i) => `<li><span class="meal-number" aria-hidden="true">${i + 1}</span><div>${mealLabels[i] ? `<span class="meal-label">${mealLabels[i]}</span>` : ""}<span class="meal-text">${escape(meal)}</span></div></li>`).join("")}</ol>` : "<p>Menú pendent de publicar.</p>"}</section><section class="diary-card activities-card"><div class="card-heading"><span>${icon("shapes")}</span><h3>Activitats</h3></div>${row.activities.length ? `<ul class="activity-list">${row.activities.map((text) => `<li>${activity(text, key)}</li>`).join("")}</ul>` : "<p>Activitats pendents de publicar.</p>"}</section></div>`;
+      return `${row.label ? `<div class="special-day">${icon("party-popper")}<span>${escape(row.label)}</span></div>` : ""}<div class="day-cards"><section class="diary-card menu-card">${character("foodie")}<div class="card-heading"><span>${icon("utensils")}</span><h2>Menú</h2></div>${row.menu.length ? `<ol class="meal-list">${row.menu.map((meal, i) => `<li><span class="meal-number" aria-hidden="true">${i + 1}</span><div>${mealLabels[i] ? `<span class="meal-label">${mealLabels[i]}</span>` : ""}<span class="meal-text">${escape(meal)}</span></div></li>`).join("")}</ol>` : "<p>Menú pendent de publicar.</p>"}</section><section class="diary-card activities-card personality-${forActivities(row.activities)}">${character(forActivities(row.activities))}<div class="card-heading"><span>${icon("shapes")}</span><h2>Activitats</h2></div>${row.activities.length ? `<ul class="activity-list">${row.activities.map((text) => `<li>${activity(text, key)}</li>`).join("")}</ul>` : "<p>Activitats pendents de publicar.</p>"}</section></div>`;
     }
     const title =
       status === "holiday"
         ? row.label || "Dia festiu"
         : status === "weekend"
-          ? "Avui toca anar a poc a poc."
-          : "Un nou dia per descobrir.";
+          ? "Cap de setmana"
+          : "Programació pendent";
     const body =
       status === "holiday"
         ? "Gaudiu del dia lliure!"
         : status === "weekend"
-          ? "És cap de setmana. Temps per jugar, fer una abraçada i estar junts."
+          ? ""
           : "Encara no hi ha menú ni activitats publicats per a aquest dia. Torna-hi més endavant.";
-    return `<section class="empty-day ${status}"><span class="empty-icon">${icon(status === "unpublished" ? "sprout" : status === "weekend" ? "sun" : "party-popper")}</span><h3>${escape(title)}</h3><p>${body}</p>${status === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
+    return `<section class="empty-day ${status}">${character(status === "weekend" ? "swimmer" : "artist")}<span class="empty-icon">${icon(status === "unpublished" ? "sprout" : status === "weekend" ? "sun" : "party-popper")}</span><h2>${escape(title)}</h2><p>${body}</p>${status === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
   }
   function renderWeek() {
     return `<div class="week-list">${weekDates(state.selected)
@@ -218,19 +216,20 @@
               ? "Encara no hi ha menú ni activitats."
               : "Gaudiu del dia lliure!";
         }
-        return `<button class="week-row ${status !== "school" ? "free" : ""} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span class="week-date"><span>${shortDay(date)}</span><strong>${date.getDate()}</strong></span><span class="week-summary">${status === "school" && row.label ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${icon("chevron-right")}</button>`;
+        return `<button class="week-row ${status !== "school" ? "free" : ""} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}" ${!parseDate(key) ? "disabled" : ""}><span class="week-date"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></span><span class="week-summary">${status === "school" && row.label ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${status === "school" ? character(forActivities(row.activities), true) : icon("chevron-right")}</button>`;
       })
       .join("")}</div>`;
   }
   function render() {
     renderHeader();
     renderNotice();
+    renderChecklist();
     if (state.loaded)
       $("main-container").innerHTML =
         state.view === "week" ? renderWeek() : renderDay();
     else if (state.failed)
       $("main-container").innerHTML =
-        `<section class="empty-day unpublished"><span class="empty-icon">${icon("cloud-off")}</span><h3>No hem pogut carregar el diari.</h3><p>Comprova la connexió i torna-ho a provar. La teva llista de la motxilla continua disponible.</p><button class="text-button" data-action="refresh">Torna-ho a provar</button></section>`;
+        `<section class="empty-day unpublished"><span class="empty-icon">${icon("cloud-off")}</span><h2>No hem pogut carregar el diari.</h2><p>Comprova la connexió i torna-ho a provar.</p><button class="text-button" data-action="refresh">Torna-ho a provar</button></section>`;
     $("main-container").setAttribute(
       "aria-busy",
       !state.loaded && !state.failed,
@@ -452,96 +451,92 @@
     closeCalendar();
   });
 
-  // Personal, editable checklist. No child profiles or server storage.
-  const defaultItems = [
-    "Roba de recanvi",
-    "Ampolla d’aigua",
-    "Tot amb el nom",
-  ].map((text, i) => ({ id: `initial-${i}`, text, done: false }));
-  const storedItems = saved("fishes-bag-v1", null);
-  let items = Array.isArray(storedItems)
-    ? storedItems
-        .filter(
-          (item) =>
-            item &&
-            typeof item.id === "string" &&
-            typeof item.text === "string" &&
-            typeof item.done === "boolean",
-        )
-        .slice(0, 50)
-        .map((item) => ({ ...item, text: item.text.slice(0, 80) }))
-    : defaultItems;
+  // School-supplied requirements only. Old personal suggestions are not imported.
+  const storedChecks = saved("fishes-supply-checks-v2", {});
+  const checked =
+    storedChecks &&
+    typeof storedChecks === "object" &&
+    !Array.isArray(storedChecks)
+      ? storedChecks
+      : {};
+  const itemId = (key, text) => `${key}:${text}`;
+  function suppliedDays() {
+    const dates =
+      state.view === "week" ? weekDates(state.selected) : [state.selected];
+    return dates
+      .map((date) => ({
+        date,
+        key: dateKey(date),
+        row: state.data[dateKey(date)],
+      }))
+      .filter((day) => day.row?.supplies?.length);
+  }
   function renderChecklist(focusId) {
-    $("checklist").innerHTML = items.length
-      ? items
-          .map(
-            (item) =>
-              `<div class="check-row"><label><input type="checkbox" data-item="${escape(item.id)}" ${item.done ? "checked" : ""}><span>${escape(item.text)}</span></label><button class="remove-item" data-remove="${escape(item.id)}" aria-label="Elimina ${escape(item.text)}">${icon("x")}</button></div>`,
-          )
-          .join("")
-      : '<p class="local-note">La llista és buida. Afegeix-hi el que necessitis.</p>';
-    $("checklist-progress").textContent =
-      items.length && items.every((item) => item.done)
-        ? "Tot a punt. Som-hi!"
-        : `${items.filter((item) => item.done).length} de ${items.length} a punt`;
-    $("reset-list").disabled = !items.some((item) => item.done);
-    icons();
+    const days = suppliedDays();
+    const entries = days.flatMap((day) =>
+      day.row.supplies.map((text) => ({ id: itemId(day.key, text), text })),
+    );
+    $("bag-content").hidden = !entries.length;
+    $("bag-count").hidden = !entries.length;
+    $("bag-count").textContent = entries.length;
+    $("checklist").innerHTML = days
+      .map(
+        (day) =>
+          `<div class="supplies-day">${state.view === "week" ? `<h3>${escape(format(day.date, { weekday: "short", day: "numeric", month: "short" }))}</h3>` : ""}${day.row.supplies.map((text) => `<div class="check-row"><label><input type="checkbox" data-item="${escape(itemId(day.key, text))}" ${checked[itemId(day.key, text)] === true ? "checked" : ""}><span>${escape(text)}</span></label></div>`).join("")}<p class="supply-source">${escape(day.row.supplySource)}</p></div>`,
+      )
+      .join("");
+    $("checklist-progress").textContent = entries.length
+      ? `${entries.filter((item) => checked[item.id] === true).length} / ${entries.length}`
+      : "";
+    $("reset-list").disabled = !entries.some(
+      (item) => checked[item.id] === true,
+    );
     if (focusId)
       Array.from($("checklist").querySelectorAll("input"))
         .find((input) => input.dataset.item === focusId)
         ?.focus();
   }
   function saveChecklist() {
-    $("storage-warning").hidden = persist("fishes-bag-v1", items);
+    $("storage-warning").hidden = persist("fishes-supply-checks-v2", checked);
     $("storage-warning").textContent =
-      "No s’ha pogut desar la llista. Els canvis es perdran en tancar aquesta pàgina.";
+      "No s’ha pogut desar la selecció en aquest dispositiu.";
   }
   $("checklist").addEventListener("change", (e) => {
-    const item = items.find((item) => item.id === e.target.dataset.item);
-    if (item) {
-      item.done = e.target.checked;
-      saveChecklist();
-      renderChecklist(item.id);
-    }
-  });
-  $("checklist").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-remove]");
-    if (btn) {
-      items = items.filter((item) => item.id !== btn.dataset.remove);
-      saveChecklist();
-      renderChecklist();
-      $("new-item").focus();
-    }
-  });
-  $("checklist-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const text = $("new-item").value.trim();
-    if (!text) return;
-    if (items.length >= 50) {
-      notify("La llista ja té 50 coses. Elimina’n alguna per afegir-ne més.");
-      return;
-    }
-    items.push({
-      id: crypto.randomUUID
-        ? crypto.randomUUID()
-        : `item-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-      text,
-      done: false,
-    });
-    $("new-item").value = "";
+    const id = e.target.dataset.item;
+    if (!id) return;
+    if (e.target.checked) checked[id] = true;
+    else delete checked[id];
     saveChecklist();
-    renderChecklist();
-    $("new-item").focus();
+    renderChecklist(id);
   });
   $("reset-list").addEventListener("click", () => {
-    items.forEach((item) => {
-      item.done = false;
-    });
+    for (const day of suppliedDays())
+      for (const text of day.row.supplies)
+        delete checked[itemId(day.key, text)];
     saveChecklist();
     renderChecklist();
-    $("new-item").focus();
   });
-  if (matchMedia("(max-width:767px)").matches) $("bag-panel").open = false;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let pauseMotion = saved("fishes-motion-paused", false) === true;
+  function syncMotion() {
+    const paused = pauseMotion || reducedMotion.matches;
+    document.documentElement.dataset.motion = paused ? "paused" : "playing";
+    $("motion-btn").setAttribute("aria-pressed", String(paused));
+    $("motion-btn").setAttribute(
+      "aria-label",
+      paused ? "Activa les animacions" : "Atura les animacions",
+    );
+    $("motion-btn").innerHTML = icon(paused ? "play" : "pause");
+    $("motion-btn").hidden = reducedMotion.matches;
+    icons();
+  }
+  $("motion-btn").addEventListener("click", () => {
+    pauseMotion = !pauseMotion;
+    persist("fishes-motion-paused", pauseMotion);
+    syncMotion();
+  });
+  reducedMotion.addEventListener("change", syncMotion);
+  syncMotion();
   window.addEventListener("online", () => loadData());
   window.addEventListener("offline", connectionStatus);
   window.addEventListener("popstate", () => {

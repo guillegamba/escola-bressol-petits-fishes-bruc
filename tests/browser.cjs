@@ -79,29 +79,51 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     await page.locator(".menu-card").textContent(),
     /Arròs a la cubana/,
   );
-  await page.locator("#bag-panel summary").click();
-  await page.locator("#new-item").fill("Gorra de recanvi");
-  await page.locator("#checklist-form button").click();
-  await page.getByLabel("Gorra de recanvi", { exact: true }).check();
+  assert.equal(await page.locator("#bag-content").isVisible(), false);
+  assert.equal(await page.locator("#checklist").textContent(), "");
+  await page.evaluate(() =>
+    localStorage.setItem(
+      "fishes-bag-v1",
+      JSON.stringify([{ id: "old", text: "Roba de recanvi", done: false }]),
+    ),
+  );
   await page.reload();
   await page.locator(".menu-card").waitFor();
-  await page.locator("#bag-panel summary").click();
+  assert.equal(await page.locator("#checklist").textContent(), "");
+  const fixture =
+    "Date,Type,Label,Activities,Menu,Supplies,SupplySource\n2026-09-07,school,,Pintura,Arròs,Davantal|Tovallola,fixture.pdf p.2\n2026-09-08,school,,Piscina,Sopa,Tovallola,fixture.pdf p.3\n";
+  await page.route("**/calendar.csv", (route) =>
+    route.fulfill({ status: 200, body: fixture }),
+  );
+  await page.goto(base + "?date=2026-09-07");
+  await page.locator(".menu-card").waitFor();
+  assert.equal(await page.locator("#bag-content").isVisible(), true);
+  assert.match(
+    await page.locator("#checklist").textContent(),
+    /fixture.pdf p.2/,
+  );
+  await page.getByLabel("Davantal", { exact: true }).check();
+  await page.reload();
+  await page.locator(".menu-card").waitFor();
   assert.equal(
-    await page.getByLabel("Gorra de recanvi", { exact: true }).isChecked(),
+    await page.getByLabel("Davantal", { exact: true }).isChecked(),
     true,
   );
-  await page.locator("#reset-list").click();
+  await page.locator("#next-day-btn").click();
   assert.equal(
-    await page.getByLabel("Gorra de recanvi", { exact: true }).isChecked(),
+    await page.getByLabel("Tovallola", { exact: true }).isChecked(),
     false,
   );
-  await page
-    .getByRole("button", { name: "Elimina Gorra de recanvi", exact: true })
-    .click();
-  assert.equal(
-    await page.getByLabel("Gorra de recanvi", { exact: true }).count(),
-    0,
-  );
+  assert.equal(await page.locator(".mascot-swimmer").count(), 1);
+  await page.locator("#weekly-btn").click();
+  assert.equal(await page.locator(".supplies-day").count(), 2);
+  assert.equal(await page.locator("#checklist input").count(), 3);
+  await page.locator("#reset-list").click();
+  assert.equal(await page.locator("#checklist input:checked").count(), 0);
+  await page.locator("#daily-btn").click();
+  await page.locator("#next-day-btn").click();
+  assert.equal(await page.locator("#bag-content").isVisible(), false);
+  await page.unroute("**/calendar.csv");
   await page.goto(base + "?date=2026-05-06");
   await page.locator(".menu-card").waitFor();
   assert.ok(
@@ -150,6 +172,42 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     path: path.join(artifacts, "week-final.png"),
     fullPage: true,
   });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(base + "?date=2026-07-23");
+  await page.locator(".menu-card").waitFor();
+  assert.equal(await page.locator(".mascot-sporty").count(), 1);
+  assert.equal(
+    await page
+      .locator(".mascot-ball")
+      .evaluate((el) => getComputedStyle(el).animationName),
+    "ball-bounce",
+  );
+  await page.locator("#motion-btn").click();
+  assert.equal(
+    await page
+      .locator(".mascot-ball")
+      .evaluate((el) => getComputedStyle(el).animationName),
+    "none",
+  );
+  await page.reload();
+  await page.locator(".menu-card").waitFor();
+  assert.equal(
+    await page.locator("#motion-btn").getAttribute("aria-pressed"),
+    "true",
+  );
+  await page.locator("#motion-btn").click();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  assert.equal(
+    await page
+      .locator(".mascot-ball")
+      .evaluate((el) => getComputedStyle(el).animationName),
+    "none",
+  );
+  await page.locator("#motion-btn").waitFor({ state: "hidden" });
+  assert.equal(
+    await page.locator(".welcome,.family-note,#checklist-form").count(),
+    0,
+  );
   await page.route("**/calendar.csv", (r) =>
     r.fulfill({ status: 200, body: "<html>not a csv</html>" }),
   );
@@ -159,7 +217,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     .waitFor();
   assert.equal(errors.length, 0, JSON.stringify(errors));
   console.log(
-    "PASS: current date; unpublished weekdays; week view; archive; modal keyboard/focus; checklist add/check/reset/delete/persistence; song links; five viewport widths; malformed CSV error.",
+    "PASS: current date; unpublished weekdays; week view; archive; modal keyboard/focus; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
   );
   await context.close();
   // Real service worker: cache installation, immediate fresh data, offline shared URLs.

@@ -139,9 +139,6 @@ button[hidden],
   font-weight: 900;
   line-height: 1.2;
 }
-.brand-period {
-  color: var(--green);
-}
 .header-actions {
   display: flex;
   align-items: center;
@@ -165,58 +162,6 @@ button[hidden],
 }
 .icon-button:hover {
   background: var(--hover);
-}
-.welcome {
-  position: relative;
-  min-height: 282px;
-  border-bottom: 1px solid var(--line);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  margin-bottom: 34px;
-}
-.welcome-copy {
-  position: relative;
-  z-index: 1;
-  padding: 15px 0 34px;
-  width: 60%;
-}
-.welcome-note {
-  display: block;
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--green);
-  margin-bottom: 12px;
-}
-.welcome h1 {
-  font-weight: 900;
-  font-size: clamp(38px, 4.5vw, 55px);
-  letter-spacing: -2px;
-  line-height: 1.06;
-}
-.welcome p {
-  margin-top: 16px;
-  color: var(--muted);
-  font-size: 16px;
-  font-weight: 600;
-}
-.companions {
-  position: absolute;
-  right: -5px;
-  bottom: -26px;
-  width: 560px;
-  height: 374px;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
-:root[data-theme="dark"] .companions {
-  mix-blend-mode: normal;
-  border-radius: 45% 45% 0 0;
-  right: 0;
-  bottom: 0;
-  width: 390px;
-  height: 260px;
 }
 .workspace {
   display: grid;
@@ -419,7 +364,7 @@ button[hidden],
   display: grid;
   place-items: center;
 }
-.card-heading h3 {
+.card-heading h2 {
   font-size: 19px;
   font-weight: 900;
   letter-spacing: -0.3px;
@@ -523,7 +468,7 @@ button[hidden],
   margin-bottom: 20px;
   transform: rotate(-7deg);
 }
-.empty-day h3 {
+.empty-day h2 {
   font-size: 25px;
   letter-spacing: -0.6px;
   font-weight: 900;
@@ -558,24 +503,6 @@ button[hidden],
 .preparation {
   padding-top: 2px;
 }
-.preparation details {
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-.preparation summary {
-  list-style: none;
-  padding: 23px 22px 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-}
-.preparation summary::-webkit-details-marker {
-  display: none;
-}
 .bag-icon {
   width: 43px;
   height: 43px;
@@ -590,13 +517,6 @@ button[hidden],
   width: 24px;
   height: 24px;
 }
-.aside-kicker {
-  display: block;
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--muted);
-  margin-bottom: 3px;
-}
 .aside-title {
   display: block;
   font-size: 21px;
@@ -604,23 +524,8 @@ button[hidden],
   letter-spacing: -0.6px;
   line-height: 1.2;
 }
-.disclosure-icon {
-  width: 15px;
-  height: 15px;
-  margin-left: auto;
-  transition: transform 0.2s;
-}
-details[open] .disclosure-icon {
-  transform: rotate(180deg);
-}
 .bag-body {
   padding: 0 22px 21px;
-}
-.bag-body > p:first-child {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--muted);
-  font-weight: 600;
 }
 .local-note {
   font-size: 10px;
@@ -673,51 +578,6 @@ details[open] .disclosure-icon {
   text-decoration: line-through;
   color: var(--muted);
 }
-.remove-item {
-  background: transparent;
-  display: grid;
-  place-items: center;
-  min-width: 32px;
-  min-height: 36px;
-  color: var(--muted);
-  border-radius: 10px;
-}
-.remove-item svg {
-  width: 13px;
-  height: 13px;
-}
-.remove-item:hover {
-  background: var(--hover);
-}
-#checklist-form {
-  display: flex;
-  gap: 5px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 3px;
-  margin-top: 13px;
-}
-#new-item {
-  width: 100%;
-  min-width: 0;
-  border: 0;
-  background: transparent;
-  padding: 7px;
-  color: var(--ink);
-  font-size: 12px;
-}
-#new-item::placeholder {
-  color: var(--muted);
-  opacity: 1;
-}
-#checklist-form button {
-  width: 32px;
-  height: 34px;
-  min-width: 32px;
-  border: 0;
-  border-radius: 9px;
-  background: var(--hover);
-}
 .checklist-bottom {
   display: flex;
   justify-content: space-between;
@@ -734,31 +594,6 @@ details[open] .disclosure-icon {
   font-size: 12px;
   color: var(--ink);
   margin-top: 12px;
-}
-.family-note {
-  padding: 32px 12px 0;
-  text-align: center;
-  color: var(--green);
-}
-.family-note > svg {
-  width: 25px;
-  height: 25px;
-  fill: var(--pink);
-  stroke: var(--pink-ink);
-  transform: rotate(12deg);
-  margin-bottom: 12px;
-}
-.family-note p {
-  font-size: 17px;
-  font-weight: 900;
-  line-height: 1.35;
-  letter-spacing: -0.3px;
-}
-.family-note > span {
-  display: block;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 8px;
 }
 .site-footer {
   border-top: 1px solid var(--line);
@@ -1001,9 +836,6 @@ dialog::backdrop {
   background: var(--hover);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .companions {
-    animation: arrive 0.7s ease-out;
-  }
   .day-cards,
   .empty-day,
   .week-list {
@@ -1029,13 +861,6 @@ dialog::backdrop {
   }
 }
 @media (min-width: 1400px) {
-  .welcome {
-    min-height: 300px;
-  }
-  .companions {
-    width: 600px;
-    height: 400px;
-  }
 }
 @media (max-width: 960px) {
   .shell {
@@ -1050,14 +875,6 @@ dialog::backdrop {
   }
   .day-cards {
     grid-template-columns: 1fr;
-  }
-  .companions {
-    right: -65px;
-    width: 510px;
-    height: 340px;
-  }
-  .welcome h1 {
-    font-size: 46px;
   }
 }
 @media (max-width: 767px) {
@@ -1088,40 +905,6 @@ dialog::backdrop {
   .header-actions svg {
     width: 17px;
     height: 17px;
-  }
-  .welcome {
-    min-height: 212px;
-    margin-bottom: 23px;
-    align-items: flex-start;
-  }
-  .welcome-copy {
-    width: 72%;
-    padding: 14px 0 30px;
-  }
-  .welcome-note {
-    font-size: 12px;
-    margin-bottom: 11px;
-  }
-  .welcome h1 {
-    font-size: 35px;
-    letter-spacing: -1.2px;
-  }
-  .welcome p {
-    font-size: 12px;
-    margin-top: 14px;
-    max-width: 170px;
-  }
-  .companions {
-    width: 298px;
-    height: 199px;
-    right: -70px;
-    bottom: -9px;
-  }
-  :root[data-theme="dark"] .companions {
-    width: 178px;
-    height: 119px;
-    right: -24px;
-    bottom: 0;
   }
   .workspace {
     display: flex;
@@ -1183,7 +966,7 @@ dialog::backdrop {
     padding: 27px;
     min-height: 252px;
   }
-  .empty-day h3 {
+  .empty-day h2 {
     font-size: 24px;
   }
   .empty-day p {
@@ -1196,14 +979,8 @@ dialog::backdrop {
   .diary-footer {
     flex-wrap: wrap;
   }
-  .preparation summary {
-    padding: 20px;
-  }
   .bag-body {
     padding: 0 20px 20px;
-  }
-  .family-note {
-    display: none;
   }
   .site-footer {
     margin-top: 32px;
@@ -1231,12 +1008,6 @@ dialog::backdrop {
   .course {
     display: none;
   }
-  .welcome h1 {
-    font-size: 31px;
-  }
-  .companions {
-    right: -87px;
-  }
   .date-heading h2 {
     font-size: 22px;
   }
@@ -1258,17 +1029,6 @@ dialog::backdrop {
 }
 @media print {
   .site-header,
-  .welcome,
-  .toolbar,
-  .week-strip,
-  .day-arrows,
-  .preparation,
-  .diary-footer,
-  .toast,
-  dialog,
-  .header-actions {
-    display: none !important;
-  }
   .shell {
     width: 100%;
   }
@@ -1302,82 +1062,11 @@ dialog::backdrop {
   overflow-wrap: anywhere;
 }
 /* Frame the complete cast and keep the diary close on smaller screens. */
-.companions {
-  right: 0;
-  bottom: 0;
-  width: 440px;
-  height: 293px;
-  filter: brightness(1.07);
-  mix-blend-mode: multiply;
-}
-:root[data-theme="dark"] .companions {
-  width: 390px;
-  height: 260px;
-  border-radius: 48% 48% 0 0;
-  filter: none;
-}
 @media (min-width: 1400px) {
-  .companions {
-    width: 465px;
-    height: 310px;
-    bottom: -5px;
-  }
 }
 @media (max-width: 960px) {
-  .companions {
-    width: 360px;
-    height: 240px;
-    right: -25px;
-    bottom: 0;
-  }
 }
 @media (max-width: 767px) {
-  .welcome {
-    min-height: 198px;
-  }
-  .welcome-copy {
-    width: 100%;
-    padding: 8px 0 24px;
-  }
-  .welcome h1 {
-    font-size: 31px;
-    max-width: 300px;
-    letter-spacing: -1.1px;
-  }
-  .welcome p {
-    max-width: 158px;
-    margin-top: 16px;
-  }
-  .companions {
-    width: 230px;
-    height: 154px;
-    right: -19px;
-    bottom: -10px;
-    mask-image: linear-gradient(to right, transparent 10%, black 35%);
-  }
-  :root[data-theme="dark"] .companions {
-    width: 130px;
-    height: 87px;
-    right: -5px;
-    bottom: 0;
-    mask-image: none;
-    border-radius: 50% 50% 0 0;
-  }
-  .welcome-note {
-    margin-bottom: 10px;
-  }
 }
 @media (max-width: 359px) {
-  .welcome h1 {
-    font-size: 28px;
-  }
-  .companions {
-    width: 196px;
-    height: 131px;
-    right: -22px;
-  }
-  .welcome p {
-    max-width: 145px;
-    font-size: 11px;
-  }
 }

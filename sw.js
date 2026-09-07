@@ -1,18 +1,19 @@
 /* Bump the shell version whenever HTML, CSS, JS or bundled assets change. */
 importScripts("./data.js");
-const CACHE = "fishes-v2";
+const CACHE = "fishes-v3";
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
+  "./characters.css",
   "./script.js",
   "./data.js",
+  "./characters.js",
   "./calendar.csv",
   "./favicon.png",
   "./manifest.json",
   "./assets/lucide.min.js",
   "./assets/nunito-latin.woff2",
-  "./assets/companions.webp",
 ];
 const absolute = (path) => new URL(path, self.registration.scope).href;
 self.addEventListener("install", (event) => {

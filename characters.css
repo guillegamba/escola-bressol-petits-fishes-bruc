@@ -1,0 +1,422 @@
+/* The cast sits in card corners; text always owns a separate column. */
+.workspace {
+  padding-top: 28px;
+}
+.site-header {
+  border-bottom: 1px solid var(--line);
+}
+.date-heading h1 {
+  font-size: 29px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+}
+.site-footer {
+  justify-content: center;
+}
+.bag-panel {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--surface);
+}
+.bag-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 23px;
+}
+.bag-heading h2 {
+  margin: 0;
+}
+.bag-heading #bag-count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 800;
+}
+.bag-body {
+  padding: 0 23px 18px;
+}
+.supply-source {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.supplies-day + .supplies-day {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+.supplies-day h3 {
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.diary-card {
+  padding: 24px;
+  min-height: 330px;
+}
+.menu-card {
+  background: #f7eac0;
+}
+.activities-card.personality-sporty {
+  background: #dcedd9;
+  color: #244a33;
+}
+.activities-card.personality-swimmer {
+  background: #dcecef;
+  color: #254d5a;
+}
+.activities-card.personality-artist {
+  background: #f3dce9;
+  color: #633e57;
+}
+:root[data-theme="dark"] .menu-card {
+  background: #463d27;
+}
+:root[data-theme="dark"] .activities-card.personality-sporty {
+  background: #294334;
+  color: #e4f1df;
+}
+:root[data-theme="dark"] .activities-card.personality-swimmer {
+  background: #29424a;
+  color: #e1eff3;
+}
+:root[data-theme="dark"] .activities-card.personality-artist {
+  background: #45323f;
+  color: #f3dce9;
+}
+.card-heading {
+  position: relative;
+  z-index: 1;
+}
+.meal-list,
+.activity-list {
+  position: relative;
+  padding-right: 95px;
+}
+.meal-text,
+.activity-list li {
+  overflow-wrap: anywhere;
+}
+.card-mascot {
+  position: absolute;
+  display: block;
+  right: -18px;
+  bottom: -10px;
+  width: 164px;
+  height: 150px;
+  pointer-events: none;
+  isolation: isolate;
+}
+.card-mascot > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  stroke-width: initial;
+}
+.card-mascot .mascot-body {
+  transform-origin: 100px 155px;
+}
+.mascot-eyes {
+  transform-origin: 100px 87px;
+}
+.mascot-left-arm {
+  transform-origin: 57px 112px;
+}
+.mascot-right-arm {
+  transform-origin: 143px 111px;
+}
+.mascot-brush {
+  transform-origin: 165px 83px;
+}
+.mascot-spoon {
+  transform-origin: 165px 85px;
+}
+.mascot-hat {
+  transform-origin: 100px 52px;
+}
+.mascot-ball {
+  transform-origin: 173px 180px;
+}
+.mascot-water {
+  transform-origin: 100px 156px;
+}
+.mascot-swimmer .mascot-legs {
+  display: none;
+}
+.empty-day {
+  position: relative;
+  overflow: hidden;
+  padding-right: 150px;
+}
+.empty-day .card-mascot {
+  width: 175px;
+  height: 159px;
+}
+.empty-day h2 {
+  font-size: 25px;
+}
+.empty-day p:empty {
+  display: none;
+}
+.week-row {
+  position: relative;
+  overflow: hidden;
+  grid-template-columns: 54px minmax(0, 1fr) 70px;
+  min-height: 116px;
+}
+.week-row .card-mascot {
+  width: 85px;
+  height: 78px;
+  right: 0;
+  bottom: 4px;
+}
+.week-row .week-summary {
+  z-index: 1;
+}
+.week-row.free {
+  min-height: 85px;
+}
+.week-row .mascot-mini ~ svg {
+  display: none;
+}
+.week-row.free > svg {
+  justify-self: end;
+}
+.mascot-mini .mascot-eyes {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="paused"]) .mascot-eyes {
+    animation: character-blink 6s infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-sporty .mascot-body {
+    animation: sporty-bounce 3s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-ball {
+    animation: ball-bounce 1.5s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-body {
+    animation: swimmer-bob 4s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-left-arm {
+    animation: swimmer-stroke 4s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-swimmer .mascot-right-arm {
+    animation: swimmer-stroke 4s ease-in-out -2s infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-water {
+    animation: water-drift 4s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-artist .mascot-right-arm,
+  :root:not([data-motion="paused"]) .mascot-brush {
+    animation: artist-paint 5s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-foodie .mascot-spoon {
+    animation: spoon-wave 5s ease-in-out infinite;
+  }
+  :root:not([data-motion="paused"]) .mascot-foodie .mascot-body {
+    animation: foodie-sway 5s ease-in-out infinite;
+  }
+  .diary-card:hover .mascot-pupils,
+  .week-row:hover .mascot-pupils {
+    transform: translate(-3px, -2px);
+    transition: transform 0.2s;
+  }
+  @keyframes character-blink {
+    0%,
+    43%,
+    47%,
+    100% {
+      transform: scaleY(1);
+    }
+    45% {
+      transform: scaleY(0.12);
+    }
+  }
+  @keyframes sporty-bounce {
+    0%,
+    40%,
+    100% {
+      transform: translateY(0) rotate(-3deg);
+    }
+    20% {
+      transform: translateY(-7px) rotate(3deg);
+    }
+  }
+  @keyframes ball-bounce {
+    0%,
+    100% {
+      transform: translateY(0) scaleY(0.94);
+    }
+    50% {
+      transform: translateY(-22px) scaleY(1);
+    }
+  }
+  @keyframes swimmer-bob {
+    0%,
+    100% {
+      transform: translateY(4px) rotate(-4deg);
+    }
+    50% {
+      transform: translateY(-2px) rotate(3deg);
+    }
+  }
+  @keyframes swimmer-stroke {
+    0%,
+    100% {
+      transform: rotate(-10deg);
+    }
+    50% {
+      transform: rotate(18deg);
+    }
+  }
+  @keyframes water-drift {
+    0%,
+    100% {
+      transform: translateX(-4px);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+  @keyframes artist-paint {
+    0%,
+    45%,
+    100% {
+      transform: rotate(0);
+    }
+    15% {
+      transform: rotate(13deg);
+    }
+    30% {
+      transform: rotate(-9deg);
+    }
+  }
+  @keyframes spoon-wave {
+    0%,
+    55%,
+    100% {
+      transform: rotate(0);
+    }
+    20% {
+      transform: rotate(-17deg);
+    }
+    35% {
+      transform: rotate(8deg);
+    }
+  }
+  @keyframes foodie-sway {
+    0%,
+    100% {
+      transform: rotate(-2deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+}
+:root[data-motion="paused"] .card-mascot * {
+  animation: none !important;
+}
+@media (max-width: 960px) {
+  .diary-card {
+    min-height: 285px;
+  }
+  .meal-list,
+  .activity-list {
+    padding-right: 105px;
+  }
+}
+@media (max-width: 767px) {
+  .workspace {
+    padding-top: 22px;
+    gap: 23px;
+  }
+  .site-header {
+    min-height: 82px;
+  }
+  .header-actions {
+    gap: 7px;
+  }
+  .course {
+    font-size: 9px;
+  }
+  .header-actions .icon-button {
+    width: 32px;
+    height: 32px;
+  }
+  .date-heading h1 {
+    font-size: 26px;
+  }
+  .diary-card {
+    padding: 23px;
+    min-height: 275px;
+  }
+  .card-mascot {
+    width: 150px;
+    height: 137px;
+    right: -17px;
+    bottom: -6px;
+  }
+  .meal-list,
+  .activity-list {
+    padding-right: 85px;
+  }
+  .meal-list {
+    gap: 16px;
+  }
+  .meal-text,
+  .activity-list li {
+    font-size: 14px;
+  }
+  .empty-day {
+    padding-right: 125px;
+    min-height: 225px;
+  }
+  .empty-day h2 {
+    font-size: 22px;
+  }
+  .empty-day .card-mascot {
+    width: 150px;
+    height: 137px;
+    right: -22px;
+  }
+  .week-row {
+    grid-template-columns: 38px minmax(0, 1fr) 54px;
+    gap: 10px;
+    padding: 15px 12px;
+  }
+  .week-row .card-mascot {
+    width: 75px;
+    height: 68px;
+    right: -8px;
+  }
+  .bag-heading {
+    padding: 19px 22px;
+  }
+  .site-footer {
+    margin-top: 28px;
+  }
+  .date-context:empty {
+    display: none;
+  }
+}
+@media (max-width: 359px) {
+  .course {
+    display: none;
+  }
+  .meal-list,
+  .activity-list {
+    padding-right: 70px;
+  }
+  .card-mascot {
+    width: 132px;
+    height: 120px;
+    right: -19px;
+  }
+  .week-row {
+    grid-template-columns: 32px minmax(0, 1fr) 45px;
+  }
+}

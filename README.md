@@ -10,7 +10,8 @@ Diari no oficial de l'**Escola Bressol Petits Fishes (Bruc)**. Per a cada dia le
 - **Setmana:** els set dies amb el menú i les activitats. Toca un dia per veure'n el detall.
 - **Calendari:** tots els mesos, navegació amb teclat, botó «Avui» i accés a l'últim dia publicat. Les fletxes del diari també admeten el gest de lliscar.
 - **Dates compartibles:** «Copia el dia» o «Copia la setmana» crea un enllaç a la vista seleccionada.
-- **La motxilla:** llista personal editable, amb elements suggerits que es poden eliminar, caselles i desmarcat manual. Es desa només a `localStorage` d'aquest navegador. No s'envia al servidor ni se sincronitza entre dispositius.
+- **La motxilla:** mostra només els materials indicats a les dades de l'escola, amb la referència del document i la pàgina. Si no n'hi ha, queda buida. Les caselles es desen per data i material en aquest navegador; no hi ha suggeriments ni entrada manual.
+- **Personatges:** el menú té un cuiner; les activitats trien un esportista, un nedador o un artista segons el text. Són il·lustracions SVG originals integrades a les targetes, amb animacions pròpies i un control per aturar-les. La preferència de moviment reduït les desactiva.
 - **Tema clar i fosc:** segueix el sistema fins que es tria manualment. Respecta el moviment reduït i permet ampliar el text.
 - **Sense connexió:** després de la primera visita amb connexió, es desen la interfície i les dades. Un avís identifica la còpia desada. Les dades es comproven primer a la xarxa quan hi ha connexió.
 
@@ -35,29 +36,32 @@ L'aplicació no necessita compilació. Les eines de desenvolupament només serve
 
 ## Fitxers
 
-| Fitxer                 | Contingut                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------ |
-| `index.html`           | Estructura accessible i diàleg del calendari.                                        |
-| `styles.css`           | Disseny adaptable, temes i moviment reduït.                                          |
-| `script.js`            | Vistes, navegació, cançons i llista personal.                                        |
-| `data.js`              | CSV validat, dates i estats dels dies; compartit amb les proves i el service worker. |
-| `calendar.csv`         | Menús, activitats i festius publicats.                                               |
-| `sw.js`                | Memòria cau de la PWA i actualització de les dades.                                  |
-| `assets/`              | Personatges, Nunito i Lucide amb les seves llicències.                               |
-| `tools/icons-entry.js` | Només les icones utilitzades, per regenerar el paquet local.                         |
-| `tests/`               | Proves de dades i de navegador.                                                      |
+| Fitxer                            | Contingut                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------ |
+| `index.html`                      | Estructura accessible i diàleg del calendari.                                        |
+| `styles.css`                      | Disseny adaptable, temes i moviment reduït.                                          |
+| `script.js`                       | Vistes, navegació, cançons i llista personal.                                        |
+| `data.js`                         | CSV validat, dates i estats dels dies; compartit amb les proves i el service worker. |
+| `calendar.csv`                    | Menús, activitats i festius publicats.                                               |
+| `sw.js`                           | Memòria cau de la PWA i actualització de les dades.                                  |
+| `characters.js`, `characters.css` | Personatges vectorials i animació.                                                   |
+| `assets/`                         | Nunito i Lucide amb les seves llicències.                                            |
+| `tools/icons-entry.js`            | Només les icones utilitzades, per regenerar el paquet local.                         |
+| `tests/`                          | Proves de dades i de navegador.                                                      |
 
 ## Actualitzar el diari
 
-Capçalera exacta: `Date,Type,Label,Activities,Menu`.
+Capçalera: `Date,Type,Label,Activities,Menu,Supplies,SupplySource`. Els CSV antics amb les cinc primeres columnes continuen sent compatibles.
 
-| Columna      | Contingut                                            |
-| ------------ | ---------------------------------------------------- |
-| `Date`       | Data vàlida en format `AAAA-MM-DD`, sense duplicats. |
-| `Type`       | `school` (lectiu) o `holiday` (festiu).              |
-| `Label`      | Nom del festiu o rètol especial opcional.            |
-| `Activities` | Activitats separades per `\|`.                       |
-| `Menu`       | Plats separats per `\|`.                             |
+| Columna        | Contingut                                                                            |
+| -------------- | ------------------------------------------------------------------------------------ |
+| `Date`         | Data vàlida en format `AAAA-MM-DD`, sense duplicats.                                 |
+| `Type`         | `school` (lectiu) o `holiday` (festiu).                                              |
+| `Label`        | Nom del festiu o rètol especial opcional.                                            |
+| `Activities`   | Activitats separades per `\|`.                                                       |
+| `Menu`         | Plats separats per `\|`.                                                             |
+| `Supplies`     | Materials a portar, separats per `\|`. Buit si no s'han indicat explícitament.       |
+| `SupplySource` | Nom del PDF i pàgina d'on s'han extret els materials. Obligatori si hi ha materials. |
 
 Exemple de les dades existents:
 
@@ -67,7 +71,7 @@ Date,Type,Label,Activities,Menu
 2026-01-09,school,Aniversari Bruno 🎂,🎶 Cançó del projecte|📚 Literatura del projecte,Crema de carbassa|Llenties estofades amb verdures|Fruita + Crudités + Pa
 ```
 
-Si un camp conté una coma o un salt de línia, posa'l entre cometes dobles. Una cometa dins d'un camp s'escriu com `""`. La importació rebutja dates incorrectes, tipus desconeguts, duplicats, fitxers buits i errors de format; mostra un error recuperable en lloc d'una pàgina buida.
+Si un camp conté una coma o un salt de línia, posa'l entre cometes dobles. Una cometa dins d'un camp s'escriu com `""`. La importació rebutja materials sense font, dates incorrectes, tipus desconeguts, duplicats, fitxers buits i errors de format; mostra un error recuperable en lloc d'una pàgina buida.
 
 1. Edita `calendar.csv` amb les dades de l'escola i executa `npm test`.
 2. Afegeix les cançons a `SONGS_BY_MONTH` de `script.js`, amb claus `AAAA-MM`.
@@ -85,7 +89,7 @@ npx playwright install chromium
 npm run test:browser
 ```
 
-Les proves de navegador cobreixen el canvi de curs, dies pendents, arxiu, setmana, teclat i focus del diàleg, llista persistent, cançons, cinc amplades, errors de dades i recàrrega offline amb una URL compartida. Generen captures a `test-results/`, que no es versiona.
+Les proves de navegador cobreixen el canvi de curs, dies pendents, arxiu, setmana, teclat i focus del diàleg, materials amb font i selecció persistent per data, cançons, cinc amplades, errors de dades i recàrrega offline amb una URL compartida. Generen captures a `test-results/`, que no es versiona.
 
 Opcions: `BASE_URL` (amb `/` final), `CHROME_PATH` (Chrome ja instal·lat) i `ARTIFACT_DIR`.
 
@@ -94,3 +98,9 @@ Per regenerar les icones després de canviar `tools/icons-entry.js`:
 ```bash
 npm run build:icons
 ```
+
+## Extreure materials dels PDF
+
+Quan la família faciliti els PDF d'activitats i menús, copia a `Supplies` només allò que el document demana portar i assigna-ho a la data indicada. Registra el nom del document i la pàgina a `SupplySource`. No dedueixis materials d'una activitat: «piscina» no implica automàticament que calgui portar una tovallola. Si la data o el requisit són ambigus, deixa el camp buit fins a aclarir-los.
+
+Les columnes noves estan preparades però buides a totes les files existents. La vista setmanal agrupa els requisits per dia. Aquesta versió no incorpora un lector automàtic de PDF: les dades verificades s'incorporen al CSV durant l'actualització del diari.

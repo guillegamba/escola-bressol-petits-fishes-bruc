@@ -71,3 +71,33 @@ test("date navigation crosses months, years, leap days and DST", () => {
     "2026-01-04",
   ]);
 });
+
+test("supplies require a source and old calendars stay compatible", () => {
+  const newHeader = "Date,Type,Label,Activities,Menu,Supplies,SupplySource\n";
+  const data = parseCalendar(
+    newHeader +
+      "2026-09-07,school,,Pintura,Arròs,Davantal|Davantal|Tovallola,fixture.pdf p.2",
+  );
+  assert.deepEqual(data["2026-09-07"].supplies, ["Davantal", "Tovallola"]);
+  assert.equal(data["2026-09-07"].supplySource, "fixture.pdf p.2");
+  assert.throws(() =>
+    parseCalendar(newHeader + "2026-09-07,school,,,Davantal,"),
+  );
+  assert.deepEqual(
+    parseCalendar(header + "2026-09-07,school,,,")["2026-09-07"].supplies,
+    [],
+  );
+});
+
+test("characters reflect activity keywords, including Catalan accents", () => {
+  const { forActivities, character } = require("../characters.js");
+  assert.equal(forActivities(["Psicomotricitat gruixuda", "Ioga"]), "sporty");
+  assert.equal(forActivities(["Pintura amb colors"]), "artist");
+  assert.equal(forActivities(["Natació a la piscina"]), "swimmer");
+  assert.equal(forActivities(["Jocs d’aigua"]), "swimmer");
+  assert.equal(
+    forActivities(["Psicomotricitat fina", "Pintem amb gel"]),
+    "artist",
+  );
+  assert.ok(character("sporty").includes("mascot-ball"));
+});
