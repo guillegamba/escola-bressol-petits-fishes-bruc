@@ -1,8 +1,16 @@
 {
   "scripts": {
-    "start": "servor --reload"
+    "start": "servor --reload",
+    "test": "node --test tests/*.test.cjs",
+    "build:icons": "esbuild tools/icons-entry.js --bundle --minify --format=iife --outfile=assets/lucide.min.js",
+    "test:browser": "node tests/browser.cjs"
   },
   "dependencies": {
     "servor": "^4.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "lucide": "0.468.0",
+    "playwright": "1.62.1"
   }
 }

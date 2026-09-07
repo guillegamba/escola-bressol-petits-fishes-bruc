@@ -1,4 +1,4 @@
-# 🐟 Fishes Bruc — Diari
+# 🐟 Fishes Bruc - Diari
 
 Diari no oficial de l'**Escola Bressol Petits Fishes (Bruc)**. Per a cada dia lectiu mostra el menú i les activitats, amb un calendari per moure't entre dies. És una app web (PWA) feta per al mòbil: funciona sense connexió i es pot instal·lar a la pantalla d'inici.
 
@@ -6,63 +6,101 @@ Diari no oficial de l'**Escola Bressol Petits Fishes (Bruc)**. Per a cada dia le
 
 ## Què fa
 
-- **Vista del dia:** una targeta de menú i una d'activitats.
-- **Calendari:** graella del mes que distingeix dies lectius, festius, avui i el dia triat.
-- **Navegació:** fletxes, gest de lliscar al mòbil o botó «Avui». Salta de mes a mes i rebota suaument al primer i l'últim dia.
-- **Dies especials:** aniversaris i celebracions surten amb un rètol destacat.
-- **Festius i caps de setmana:** targeta de dia lliure en lloc del menú.
-- **Cançons:** si una activitat parla d'una *cançó* i el mes en té una configurada, apareix un botó ▶ que hi enllaça.
+- **Diari:** menú, activitats, celebracions i cançó del mes.
+- **Setmana:** els set dies amb el menú i les activitats. Toca un dia per veure'n el detall.
+- **Calendari:** tots els mesos, navegació amb teclat, botó «Avui» i accés a l'últim dia publicat. Les fletxes del diari també admeten el gest de lliscar.
+- **Dates compartibles:** «Copia el dia» o «Copia la setmana» crea un enllaç a la vista seleccionada.
+- **La motxilla:** mostra només els materials indicats a les dades de l'escola, amb la referència del document i la pàgina. Si no n'hi ha, queda buida. Les caselles es desen per data i material en aquest navegador; no hi ha suggeriments ni entrada manual.
+- **Personatges:** el menú té un cuiner; les activitats trien un esportista, un nedador o un artista segons el text. Són il·lustracions SVG originals integrades a les targetes, amb animacions pròpies i un control per aturar-les. La preferència de moviment reduït les desactiva.
+- **Tema clar i fosc:** segueix el sistema fins que es tria manualment. Respecta el moviment reduït i permet ampliar el text.
+- **Sense connexió:** després de la primera visita amb connexió, es desen la interfície i les dades. Un avís identifica la còpia desada. Les dades es comproven primer a la xarxa quan hi ha connexió.
 
-## Fitxers
+## Nou curs i dades pendents
 
-| Fitxer | Què és |
-| --- | --- |
-| `index.html` | Tota l'app: marcatge, estils i lògica en un sol fitxer. |
-| `calendar.csv` | Les dades. **És el que edites per actualitzar el diari.** |
-| `manifest.json` | Manifest de la PWA. |
-| `sw.js` | Service worker (memòria cau per funcionar offline). |
-| `favicon.png` | Icona de l'app. |
-| `package.json` | Dependència i script de desenvolupament (`servor`). |
-| `styles.css`, `script.js` | Restes de la plantilla inicial. **No es fan servir.** |
+L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia laborable sense fila es mostra com a **programació pendent**, mai com a festiu. Els dissabtes i diumenges sense fila es mostren com a cap de setmana; una fila explícita té prioritat.
 
-## Les dades (`calendar.csv`)
-
-Capçalera: `Date,Type,Label,Activities,Menu`
-
-| Columna | Contingut |
-| --- | --- |
-| `Date` | Data en format `AAAA-MM-DD`. |
-| `Type` | `school` (lectiu) o `holiday` (festiu). |
-| `Label` | En festius, el nom del festiu. En lectius, un rètol de dia especial (opcional). |
-| `Activities` | Activitats separades per `\|`. Només en dies lectius. |
-| `Menu` | Plats separats per `\|`. Només en dies lectius. |
-
-```csv
-2026-01-06,holiday,Dia de Reis 👑,,
-2026-01-02,school,,🧸 Joc lliure,Sopa de verdures|Remenat d'ou|Fruita + Crudités
-2026-01-09,school,Aniversari Bruno 🎂,🎶 Cançó del projecte|📚 Literatura,Crema de carbassa|Llenties estofades|Fruita + Pa
-```
-
-- Els dies sense fila (caps de setmana) surten com a «Cap de setmana».
-- Els mesos disponibles es dedueixen de les dates del fitxer. Ara mateix, de gener a juny de 2026.
-- Les cançons es configuren a `index.html`, a l'objecte `SONGS_BY_MONTH` (clau `"AAAA-MM"`).
+**Les dades del repositori arriben al 31 de juliol de 2026. Cal afegir la programació real de setembre al CSV.** El redisseny no inventa ni trasllada menús, activitats o festius del curs anterior. El curs de la capçalera es calcula de setembre a agost; no implica que hi hagi una programació publicada.
 
 ## Executar-ho en local
 
-Cal servir-ho per HTTP, perquè carrega el CSV amb `fetch()` (obrir el fitxer directament no funciona).
+Cal servir els fitxers per HTTP:
 
 ```bash
-npm install && npm start      # servor amb recàrrega en viu
-# o bé:
-python3 -m http.server 8000   # http://localhost:8000
+npm ci
+npm start
+# O bé, sense instal·lar dependències:
+python3 -m http.server 8000
 ```
+
+L'aplicació no necessita compilació. Les eines de desenvolupament només serveixen per fer proves i regenerar el petit paquet d'icones. Es pot desplegar la carpeta com a lloc estàtic, també sota una subruta. Es conserva Vercel Web Analytics als desplegaments; no es carrega a localhost.
+
+## Fitxers
+
+| Fitxer                            | Contingut                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------ |
+| `index.html`                      | Estructura accessible i diàleg del calendari.                                        |
+| `styles.css`                      | Disseny adaptable, temes i moviment reduït.                                          |
+| `script.js`                       | Vistes, navegació, cançons i llista personal.                                        |
+| `data.js`                         | CSV validat, dates i estats dels dies; compartit amb les proves i el service worker. |
+| `calendar.csv`                    | Menús, activitats i festius publicats.                                               |
+| `sw.js`                           | Memòria cau de la PWA i actualització de les dades.                                  |
+| `characters.js`, `characters.css` | Personatges vectorials i animació.                                                   |
+| `assets/`                         | Nunito i Lucide amb les seves llicències.                                            |
+| `tools/icons-entry.js`            | Només les icones utilitzades, per regenerar el paquet local.                         |
+| `tests/`                          | Proves de dades i de navegador.                                                      |
 
 ## Actualitzar el diari
 
-1. Edita `calendar.csv`.
-2. Si cal, afegeix la cançó del mes a `SONGS_BY_MONTH`.
-3. Commit i desplega. Si canvies fitxers bàsics, apuja la versió de `CACHE` a `sw.js` (p. ex. `fishes-v1` → `fishes-v2`) perquè els clients rebin els canvis.
+Capçalera: `Date,Type,Label,Activities,Menu,Supplies,SupplySource`. Els CSV antics amb les cinc primeres columnes continuen sent compatibles.
 
-## Tecnologies
+| Columna        | Contingut                                                                            |
+| -------------- | ------------------------------------------------------------------------------------ |
+| `Date`         | Data vàlida en format `AAAA-MM-DD`, sense duplicats.                                 |
+| `Type`         | `school` (lectiu) o `holiday` (festiu).                                              |
+| `Label`        | Nom del festiu o rètol especial opcional.                                            |
+| `Activities`   | Activitats separades per `\|`.                                                       |
+| `Menu`         | Plats separats per `\|`.                                                             |
+| `Supplies`     | Materials a portar, separats per `\|`. Buit si no s'han indicat explícitament.       |
+| `SupplySource` | Nom del PDF i pàgina d'on s'han extret els materials. Obligatori si hi ha materials. |
 
-HTML/CSS/JS nadiu, sense compilació. Tailwind i Lucide via CDN, tipografia Nunito, service worker + manifest per a la PWA i Vercel Web Analytics. Desplegable a qualsevol allotjament estàtic (les rutes són relatives); l'ús de Vercel Analytics apunta a un desplegament a **Vercel**.
+Exemple de les dades existents:
+
+```csv
+Date,Type,Label,Activities,Menu
+2026-01-06,holiday,Dia de Reis 👑,,
+2026-01-09,school,Aniversari Bruno 🎂,🎶 Cançó del projecte|📚 Literatura del projecte,Crema de carbassa|Llenties estofades amb verdures|Fruita + Crudités + Pa
+```
+
+Si un camp conté una coma o un salt de línia, posa'l entre cometes dobles. Una cometa dins d'un camp s'escriu com `""`. La importació rebutja materials sense font, dates incorrectes, tipus desconeguts, duplicats, fitxers buits i errors de format; mostra un error recuperable en lloc d'una pàgina buida.
+
+1. Edita `calendar.csv` amb les dades de l'escola i executa `npm test`.
+2. Afegeix les cançons a `SONGS_BY_MONTH` de `script.js`, amb claus `AAAA-MM`.
+3. Si canvies HTML, CSS, JavaScript o recursos, incrementa `CACHE` a `sw.js` per actualitzar la interfície desada. Si només canvies el CSV, es comprova a la xarxa sense esperar un canvi de versió.
+4. Desplega. Les persones que ja tinguin oberta una versió anterior poden haver de tornar a obrir o recarregar l'app.
+
+## Proves
+
+```bash
+npm test
+# En un terminal separat:
+python3 -m http.server 8000
+# En un altre terminal:
+npx playwright install chromium
+npm run test:browser
+```
+
+Les proves de navegador cobreixen el canvi de curs, dies pendents, arxiu, setmana, teclat i focus del diàleg, materials amb font i selecció persistent per data, cançons, cinc amplades, errors de dades i recàrrega offline amb una URL compartida. Generen captures a `test-results/`, que no es versiona.
+
+Opcions: `BASE_URL` (amb `/` final), `CHROME_PATH` (Chrome ja instal·lat) i `ARTIFACT_DIR`.
+
+Per regenerar les icones després de canviar `tools/icons-entry.js`:
+
+```bash
+npm run build:icons
+```
+
+## Extreure materials dels PDF
+
+Quan la família faciliti els PDF d'activitats i menús, copia a `Supplies` només allò que el document demana portar i assigna-ho a la data indicada. Registra el nom del document i la pàgina a `SupplySource`. No dedueixis materials d'una activitat: «piscina» no implica automàticament que calgui portar una tovallola. Si la data o el requisit són ambigus, deixa el camp buit fins a aclarir-los.
+
+Les columnes noves estan preparades però buides a totes les files existents. La vista setmanal agrupa els requisits per dia. Aquesta versió no incorpora un lector automàtic de PDF: les dades verificades s'incorporen al CSV durant l'actualització del diari.
