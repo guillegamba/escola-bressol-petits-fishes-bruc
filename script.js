@@ -249,7 +249,7 @@
       : kind === "weekend"
         ? ""
         : "Encara no hi ha menú ni activitats publicats per a aquest dia. Torna-hi més endavant.";
-    return `<section class="empty-day ${kind}">${character(kind === "weekend" ? "swimmer" : "artist")}<span class="empty-icon">${icon(kind === "unpublished" ? "sprout" : kind === "weekend" ? "sun" : "door-closed")}</span>${closed ? '<span class="day-flag is-closed">Escola tancada</span>' : ""}<h2>${escape(title)}</h2><p>${body}</p>${kind === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
+    return `<section class="empty-day ${kind}"><span class="empty-icon">${icon(kind === "unpublished" ? "sprout" : kind === "weekend" ? "sun" : "door-closed")}</span>${closed ? '<span class="day-flag is-closed">Escola tancada</span>' : ""}<h2>${escape(title)}</h2><p>${body}</p>${kind === "unpublished" ? '<button class="text-button" data-action="refresh">Torna a comprovar</button>' : ""}</section>`;
   }
   function renderWeek() {
     return `<div class="week-list">${weekViewDates()
@@ -277,7 +277,7 @@
                 ? "Gaudiu del dia lliure!"
                 : "Encara no hi ha menú ni activitats.";
         }
-        return `<button class="week-row kind-${kind} ${open ? "" : "free"} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}"><span class="week-date"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></span><span class="week-summary">${kind === "special" ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${open ? character(forActivities(row.activities), true) : icon("chevron-right")}</button>`;
+        return `<button class="week-row kind-${kind} ${open ? "" : "free"} ${key === dateKey(state.selected) ? "selected" : ""}" data-week-date="${key}" aria-label="${shortDay(date)} ${date.getDate()}, ${escape(title)}, ${escape(detail)}. Obre ${escape(format(date, { dateStyle: "full" }))}"><span class="week-date"><span>${shortDay(date)}</span> <strong>${date.getDate()}</strong></span><span class="week-summary">${kind === "special" ? `<span class="week-special">${escape(row.label)}</span>` : ""}<span class="week-row-title">${escape(title)}</span><span class="week-row-detail">${escape(detail)}</span></span>${icon("chevron-right")}</button>`;
       })
       .join("")}</div>`;
   }
