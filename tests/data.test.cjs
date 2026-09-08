@@ -102,7 +102,7 @@ test("characters reflect activity keywords, including Catalan accents", () => {
     forActivities(["Psicomotricitat fina", "Pintem amb gel"]),
     "artist",
   );
-  assert.ok(character("sporty").includes("mascot-ball"));
+  assert.ok(character("sporty").includes("mascot-silhouette"));
 });
 
 test("day kinds separate closures from special days", () => {

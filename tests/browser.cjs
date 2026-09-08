@@ -245,14 +245,14 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
   assert.equal(await page.locator(".mascot-sporty").count(), 1);
   assert.equal(
     await page
-      .locator(".mascot-ball")
+      .locator(".mascot-sporty .mascot-body")
       .evaluate((el) => getComputedStyle(el).animationName),
-    "ball-bounce",
+    "sporty-settle",
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
   assert.equal(
     await page
-      .locator(".mascot-ball")
+      .locator(".mascot-sporty .mascot-body")
       .evaluate((el) => getComputedStyle(el).animationName),
     "none",
   );
