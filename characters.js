@@ -47,7 +47,7 @@
       ink: "#57424a",
       shape:
         "M112 12C164 10 202 47 207 101C214 157 179 204 122 210C63 217 17 180 12 125C6 67 52 15 112 12Z",
-      eyes: '<path d="M80 55C79 65 93 69 97 59M111 59C109 69 122 73 127 64"/>',
+      eyes: '<ellipse cx="88" cy="60" rx="4" ry="7" fill="currentColor" stroke="none"/><ellipse cx="119" cy="64" rx="4" ry="7" fill="currentColor" stroke="none"/>',
       mouth: '<path d="M69 75C79 96 112 106 135 88"/>',
       pose: "rotate(-14 110 110)",
     },

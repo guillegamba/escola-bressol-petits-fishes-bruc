@@ -58,7 +58,7 @@
 .diary-card {
   padding: 24px 24px 184px;
   min-height: 420px;
-  overflow: visible;
+  overflow: hidden;
 }
 .menu-card {
   background: #eee4d5;
@@ -103,14 +103,14 @@
 .activity-list li {
   overflow-wrap: anywhere;
 }
-/* The illustration window reaches 10px beyond the card. Its lower crop stays
-   independent of the text column and contains every animated pose. */
+/* The card clips every animated pose to its rounded boundary.
+   The illustration window stays independent of the text column. */
 .card-mascot {
   position: absolute;
   display: block;
-  right: -10px;
-  bottom: -10px;
-  width: calc(100% + 10px);
+  right: 0;
+  bottom: 0;
+  width: 100%;
   height: 178px;
   overflow: hidden;
   border-radius: 0 0 28px 24px;

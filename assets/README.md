@@ -4,7 +4,7 @@
 - `lucide.min.js`: a tree-shaken bundle of Lucide 0.468.0 containing the interface icons. Source: `../tools/icons-entry.js`. Regenerate with `npm run build:icons`. See `Lucide-LICENSE.txt`.
 - The original school wordmark and favicon are preserved.
 
-The characters are original code-native illustrations in `../characters.js`, animated in `../characters.css`. The supplied video and Headspace Figma reference informed their near-circular silhouettes, high-set curved eyes, broad smiles, and oversized cropping. These are original SVG drawings, not exported Headspace assets. Daily illustrations extend 10px beyond the card in a separate lower window, leaving the text its full width. No reference frames or images are embedded.
+The characters are original code-native illustrations in `../characters.js`, animated in `../characters.css`. The supplied video and Headspace Figma reference informed their near-circular silhouettes, high-set curved eyes, broad smiles, and oversized cropping. These are original SVG drawings, not exported Headspace assets. Daily illustrations stay clipped inside the rounded card boundary in a separate lower window, leaving the text its full width. The artist has open eyes for variation. No reference frames or images are embedded.
 
 Each character uses exactly two colors: a muted body fill and a darker facial ink. There are no limbs, accessories, outlines around the body, shadows or textures. Personality is conveyed by expression and subtle movement: a small spring for sporty, a relaxed drift for swimmer, a curious tilt for artist, and a contented smile for the menu.
 
