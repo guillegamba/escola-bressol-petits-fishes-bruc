@@ -38,7 +38,7 @@
       ink: "#3c5054",
       shape:
         "M108 16C161 9 204 48 208 106C214 163 174 208 118 211C59 216 14 177 12 122C9 64 48 22 108 16Z",
-      eyes: '<path d="M80 57C81 68 95 68 96 57M111 57C112 68 126 68 127 57"/>',
+      eyes: '<g class="mascot-goggles"><rect x="75" y="49" width="26" height="22" rx="10"/><rect x="109" y="49" width="26" height="22" rx="10"/><path d="M101 58Q105 54 109 58M69 57H75M135 57H141"/><path d="M85 59Q88 64 92 59M118 59Q122 64 126 59" stroke-width="2"/></g>',
       mouth: '<path d="M71 76C86 96 121 96 137 76"/>',
       pose: "rotate(12 110 110)",
     },
@@ -64,7 +64,7 @@
   function character(kind, small = false) {
     if (!personalities.includes(kind)) kind = "artist";
     const design = designs[kind];
-    return `<span class="card-mascot mascot-${kind}${small ? " mascot-mini" : ""}" aria-hidden="true"><svg viewBox="0 0 220 220" focusable="false" style="color:${design.ink}"><g class="mascot-body"><g transform="${design.pose}"><path class="mascot-silhouette" d="${design.shape}" fill="${design.body}"/><g class="mascot-face" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><g class="mascot-eyes">${design.eyes}</g><g class="mascot-mouth">${design.mouth}</g></g></g></g></svg></span>`;
+    return `<span class="card-mascot mascot-${kind}${small ? " mascot-mini" : ""}" aria-hidden="true"><svg viewBox="0 0 220 220" focusable="false" style="color:${design.ink}"><g class="mascot-idle"><g class="mascot-body"><g transform="${design.pose}"><path class="mascot-silhouette" d="${design.shape}" fill="${design.body}"/><g class="mascot-face" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><g class="mascot-eyes">${design.eyes}</g><g class="mascot-mouth">${design.mouth}</g></g></g></g></g></svg></span>`;
   }
   const api = { character, forActivities };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

@@ -27,6 +27,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
   await page.clock.install({ time: new Date("2026-09-06T12:00:00+02:00") });
   await page.goto(base + "");
   await page.locator(".empty-day").waitFor();
+  assert.equal(await page.locator(".card-mascot").count(), 0);
   assert.match(
     await page.locator("#date-title").textContent(),
     /6 de setembre/,
@@ -44,6 +45,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
   assert.equal(await page.locator("#schedule-status").textContent(), "");
   await page.locator("#weekly-btn").click();
   assert.equal(await page.locator(".week-row").count(), 5);
+  assert.equal(await page.locator(".card-mascot").count(), 0);
   assert.equal(await page.locator(".week-row.kind-weekend").count(), 0);
   assert.equal(
     await page
@@ -249,7 +251,9 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .evaluate((el) => getComputedStyle(el).animationName),
     "sporty-settle",
   );
+  assert.equal(await page.locator(".mascot-sporty .mascot-idle").evaluate(el => getComputedStyle(el).animationIterationCount), "infinite");
   await page.emulateMedia({ reducedMotion: "reduce" });
+  assert.equal(await page.locator(".mascot-sporty .mascot-idle").evaluate(el => getComputedStyle(el).animationName), "none");
   assert.equal(
     await page
       .locator(".mascot-sporty .mascot-body")

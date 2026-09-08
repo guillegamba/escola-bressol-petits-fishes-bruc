@@ -153,17 +153,7 @@
 .empty-day {
   position: relative;
   overflow: hidden;
-  padding-right: 150px;
-}
-.empty-day .card-mascot {
-  width: 160px;
-  height: 170px;
-}
-.empty-day .card-mascot > svg {
-  width: 250px;
-  height: 250px;
-  right: -100px;
-  top: 25px;
+  padding-right: 24px;
 }
 .empty-day h2 {
   font-size: 25px;
@@ -174,20 +164,8 @@
 .week-row {
   position: relative;
   overflow: hidden;
-  grid-template-columns: 54px minmax(0, 1fr) 94px;
+  grid-template-columns: 54px minmax(0, 1fr) 20px;
   min-height: 116px;
-}
-.week-row .card-mascot {
-  width: 145px;
-  height: 145px;
-  right: 0;
-  bottom: 0;
-}
-.week-row .card-mascot > svg {
-  width: 145px;
-  height: 145px;
-  right: -45px;
-  top: 30px;
 }
 .week-row .week-summary {
   z-index: 1;
@@ -198,15 +176,41 @@
 .week-row .mascot-mini ~ svg {
   display: none;
 }
-.week-row.free > svg {
+.week-row > svg {
   justify-self: end;
 }
-.mascot-mini .mascot-eyes {
-  animation: none !important;
-}
-/* Brief greeting on entry, then rest. Hover/focus invites another movement.
-   No perpetual motion and no new controls added to the user's navigation. */
+
+/* A slow, small idle breath runs independently of the entry/hover motion.
+   Reduced-motion preferences disable both layers. */
 @media (prefers-reduced-motion: no-preference) {
+  .mascot-idle {
+    transform-origin: 110px 170px;
+    animation: idle-breathe 7s ease-in-out infinite;
+  }
+  .mascot-swimmer .mascot-idle {
+    animation-duration: 8.5s;
+    animation-delay: -2s;
+  }
+  .mascot-artist .mascot-idle {
+    animation-duration: 9s;
+    animation-delay: -4s;
+  }
+  .mascot-foodie .mascot-idle {
+    animation-delay: -1s;
+  }
+  .mascot-swimmer .mascot-eyes {
+    animation: none;
+  }
+  @keyframes idle-breathe {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-2px) rotate(0.5deg);
+    }
+  }
+
   .mascot-eyes {
     animation: soft-blink 4.8s ease 1;
   }
@@ -226,9 +230,7 @@
     transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .diary-card:hover .mascot-face,
-  .diary-card:focus-within .mascot-face,
-  .week-row:hover .mascot-face,
-  .week-row:focus-visible .mascot-face {
+  .diary-card:focus-within .mascot-face {
     transform: translate(-4px, -2px) rotate(-4deg);
   }
   .diary-card:hover .mascot-body,
@@ -364,28 +366,16 @@
     font-size: 14px;
   }
   .empty-day {
-    padding-right: 0;
+    padding-right: 24px;
     min-height: 225px;
   }
   .empty-day h2 {
     font-size: 22px;
   }
-  .empty-day .card-mascot {
-    width: 145px;
-    height: 170px;
-    right: 0;
-    bottom: 0;
-  }
   .week-row {
-    grid-template-columns: 38px minmax(0, 1fr) 88px;
+    grid-template-columns: 38px minmax(0, 1fr) 18px;
     gap: 10px;
     padding: 15px 12px;
-  }
-  .week-row .card-mascot {
-    width: 128px;
-    height: 128px;
-    right: 0;
-    bottom: 0;
   }
   .bag-heading {
     padding: 19px 22px;
@@ -409,6 +399,6 @@
     height: 155px;
   }
   .week-row {
-    grid-template-columns: 32px minmax(0, 1fr) 82px;
+    grid-template-columns: 32px minmax(0, 1fr) 16px;
   }
 }
