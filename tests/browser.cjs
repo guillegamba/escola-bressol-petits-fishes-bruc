@@ -124,8 +124,8 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     await page.locator("#date-title").textContent(),
     /18 de setembre/,
   );
-  // November holds course-calendar rows (a closure, a free-disposition day) but
-  // no programme, so the month still reads as pending.
+  // November holds course-calendar rows (a closure, a free-disposition day, the
+  // pool kit on Mondays) but no programme, so the month still reads as pending.
   await page.goto(base + "?date=2026-11-10&view=week");
   await page.locator("#schedule-status .schedule-notice").waitFor();
   assert.match(
@@ -137,7 +137,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .locator(".week-row")
       .filter({ hasText: "Programació pendent" })
       .count(),
-    5,
+    4,
   );
   await page.locator('[data-action="archive"]').click();
   assert.match(
