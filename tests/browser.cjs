@@ -142,11 +142,11 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
   await page.locator('[data-action="archive"]').click();
   assert.match(
     await page.locator("#date-title").textContent(),
-    /30 de setembre/,
+    /29 d’octubre/,
   );
   assert.match(
     await page.locator(".menu-card").textContent(),
-    /Estofat de mongetes blanques/,
+    /Delícies de pollastre/,
   );
   assert.equal(await page.locator("#bag-content").isVisible(), false);
   assert.equal(await page.locator("#checklist").textContent(), "");
@@ -199,6 +199,12 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     (await page.locator(".song-link").first().getAttribute("href")).startsWith(
       "https://www.youtube.com/",
     ),
+  );
+  await page.goto(base + "?date=2026-10-08");
+  await page.locator(".menu-card").waitFor();
+  assert.match(
+    await page.locator(".song-link").first().getAttribute("href"),
+    /list=PLMMEEBLxpWRvd9OllWlKXk20wEjbYsLxD/,
   );
   await page.goto(base + "?date=2026-07-24");
   await page.locator(".menu-card").waitFor();
@@ -275,7 +281,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     .waitFor();
   assert.equal(errors.length, 0, JSON.stringify(errors));
   console.log(
-    "PASS: current date; published September; pending month with calendar-only rows; Mon-Fri week view; month view keyboard and inert weekends; weekend-skipping day arrows; archive; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
+    "PASS: current date; published September and October; pending month with calendar-only rows; Mon-Fri week view; month view keyboard and inert weekends; weekend-skipping day arrows; archive; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
   );
   await context.close();
   // Real service worker: cache installation, immediate fresh data, offline shared URLs.
