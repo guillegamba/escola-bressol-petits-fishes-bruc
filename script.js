@@ -37,6 +37,8 @@
     ["dg", "dl", "dt", "dc", "dj", "dv", "ds"][date.getDay()];
   const SONGS_BY_MONTH = {
     "2026-05": "https://www.youtube.com/watch?v=RuqvGiZi0qg",
+    "2026-10":
+      "https://www.youtube.com/playlist?list=PLMMEEBLxpWRvd9OllWlKXk20wEjbYsLxD",
   };
   const initialParams = new URLSearchParams(location.search);
   const state = {

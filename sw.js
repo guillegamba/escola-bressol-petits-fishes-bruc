@@ -1,6 +1,6 @@
 /* Bump the shell version whenever HTML, CSS, JS or bundled assets change. */
 importScripts("./data.js");
-const CACHE = "giraffes-v7";
+const CACHE = "giraffes-v8";
 const CORE_ASSETS = [
   "./",
   "./index.html",
