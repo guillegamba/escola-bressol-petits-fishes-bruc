@@ -175,7 +175,7 @@ Date,Type,Label,Activities,Menu,Supplies,SupplySource
 2026-09-30,school,,🏃 Psicomotricitat|🧺 Panera del projecte,Estofat de mongetes blanques|Pollastre al forn|Fruita + Crudités,,
 2026-10-01,school,,🎵 Música|🎶 Cançó del projecte: La Castanyera|🏠 Joc simbòlic,Amanida de tomàquet i cogombre|Cuixa de pollastre al forn|Entrepà + Crudités,,
 2026-10-02,school,,🎨 Activitat del projecte|📖 Conta contes: La tardor de l'arbre rondinaire,Sopa de verdures|Remenat d'ou|Fruita + Crudités,,
-2026-10-05,school,Comença la piscina 🏊,🏊 Piscina|🧩 Joc heurístic,Amanida de pasta|Delícies de pollastre|Fruita + Crudités,,
+2026-10-05,school,Comença la piscina 🏊,🏊 Piscina|🧩 Joc heurístic,Amanida de pasta|Delícies de pollastre|Fruita + Crudités,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-10-06,school,,🍂 Vocabulari de tardor|🏠 Joc simbòlic,Mongeta blanca estofada|Mandonguilles amb salsa de verdures|Iogurt + Crudités,,
 2026-10-07,school,Biblioteca 📚,📚 Biblioteca|🧺 Panera del projecte,Crema de verdures|Peix al forn|Fruita + Crudités,,
 2026-10-08,school,,🎵 Música|🎶 Cançó del projecte: La Castanyera|🏠 Joc simbòlic,Pèsols amb patates|Hamburguesa a la planxa|Entrepà + Crudités,,
@@ -185,23 +185,29 @@ Date,Type,Label,Activities,Menu,Supplies,SupplySource
 2026-10-14,school,,🏃 Psicomotricitat|🧺 Panera del projecte,Wok de verdures|Lluç a les fines herbes|Fruita + Crudités,,
 2026-10-15,school,,🎵 Música|🎶 Cançó del projecte: La Castanyera|🏠 Joc simbòlic,Bròquil amb patates|Hamburguesa de pollastre|Entrepà + Crudités,,
 2026-10-16,school,,🛒 El mercat a la tardor|📖 Conta contes: La tardor de l'arbre rondinaire,Sopa de galets|Remenat d'ou|Fruita + Crudités,,
-2026-10-19,school,,🏊 Piscina|🧩 Joc heurístic,Macarrons integrals|Bolonyesa de vedella|Fruita + Crudités,,
+2026-10-19,school,,🏊 Piscina|🧩 Joc heurístic,Macarrons integrals|Bolonyesa de vedella|Fruita + Crudités,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-10-20,school,,🖐️ Taula sensorial de tardor|🏠 Joc simbòlic,Patates en llesques|Empedrat de cigrons|Iogurt + Crudités,,
 2026-10-21,school,,🏃 Psicomotricitat|🧺 Panera del projecte,Crema de verdures|Peix al forn|Fruita + Crudités,,
 2026-10-22,school,,🎵 Música|🎶 Cançó del projecte: La Castanyera|🏠 Joc simbòlic,Pèsols amb patates|Hamburguesa a la planxa|Entrepà + Crudités,,
 2026-10-23,school,Workshop / taller 🎨,🐌 Fem cargols amb plastilina|🎨 Workshop,Brou d'au i pasta|Truita al forn|Fruita + Crudités,,
-2026-10-26,school,Aniversari Adam 🎂,🏊 Piscina|🧩 Joc heurístic,Macarrons amb salsa de tomàquet|Bolonyesa de vedella|Fruita + Crudités,,
+2026-10-26,school,Aniversari Adam 🎂,🏊 Piscina|🧩 Joc heurístic,Macarrons amb salsa de tomàquet|Bolonyesa de vedella|Fruita + Crudités,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-10-27,school,,🍁 Seriació de tardor|🏠 Joc simbòlic,Amanida de tomàquet i cogombre|Llenties estofades|Iogurt + Crudités,,
 2026-10-28,school,,🏃 Psicomotricitat|🧺 Panera del projecte,Saltejat d'arròs amb verdures|Filet de lluç al forn|Fruita + Crudités,,
 2026-10-29,school,,🎵 Música|🎶 Cançó del projecte: La Castanyera|🏠 Joc simbòlic,Mongeta verda amb patata|Delícies de pollastre|Entrepà + Crudités,,
 2026-10-30,holiday,Lliure Disposició,,,,
 2026-11-01,holiday,Tots Sants 🕯️,,,,
+2026-11-02,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-11-04,school,Biblioteca 📚,,,,
+2026-11-09,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2026-11-16,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-11-20,holiday,Lliure Disposició,,,,
+2026-11-23,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2026-11-30,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-12-02,school,Biblioteca 📚,,,,
 2026-12-06,holiday,Dia de la Constitució,,,,
 2026-12-07,holiday,Lliure Disposició,,,,
 2026-12-08,holiday,La Immaculada,,,,
+2026-12-14,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2026-12-18,school,Taller de Nadal 🎄,,,,
 2026-12-21,school,Casals de Nadal ❄️,,,,
 2026-12-22,school,Casals de Nadal ❄️,,,,
@@ -217,9 +223,18 @@ Date,Type,Label,Activities,Menu,Supplies,SupplySource
 2027-01-04,school,Casals de Nadal ❄️,,,,
 2027-01-05,holiday,Lliure Disposició,,,,
 2027-01-06,holiday,Dia de Reis 👑,,,,
+2027-01-11,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-01-13,school,Biblioteca 📚,,,,
+2027-01-18,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-01-25,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-02-01,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-02-03,school,Biblioteca 📚,,,,
 2027-02-08,holiday,Lliure Disposició,,,,
+2027-02-15,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-02-22,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-03-01,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-03-08,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-03-15,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-03-17,school,Biblioteca 📚,,,,
 2027-03-22,school,Casals de Setmana Santa 🐣,,,,
 2027-03-23,school,Casals de Setmana Santa 🐣,,,,
@@ -227,15 +242,24 @@ Date,Type,Label,Activities,Menu,Supplies,SupplySource
 2027-03-25,school,Casals de Setmana Santa 🐣,,,,
 2027-03-26,holiday,Divendres Sant,,,,
 2027-03-29,holiday,Dilluns de Pasqua 🐣,,,,
+2027-04-05,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-04-07,school,Biblioteca 📚,,,,
+2027-04-12,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-04-19,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-04-23,school,Taller de Sant Jordi 🌹,,,,
+2027-04-26,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-04-30,holiday,Lliure Disposició,,,,
 2027-05-01,holiday,Festa del Treball,,,,
+2027-05-03,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-05-05,school,Biblioteca 📚,,,,
+2027-05-10,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-05-17,holiday,Pasqua Granada,,,,
 2027-05-18,holiday,Lliure Disposició,,,,
+2027-05-24,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-05-31,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-06-02,school,Biblioteca 📚,,,,
-2027-06-14,school,Última piscina del curs 🏊,,,,
+2027-06-07,school,,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
+2027-06-14,school,Última piscina del curs 🏊,,,🩱 Banyador (si ja no porta bolquer)|🩲 Bolquer d'aigua (si porta bolquer)|🩴 Xancles|🛁 Tovallola amb forat per al cap|🧢 Casquet de bany|👕 Xandall de l'escola (posat des de casa)|🎒 Bossa impermeable|🎀 Goma de cabells (si cal)|🏷️ Tot marcat amb el nom i dins la motxilla de l'escola,"Material_piscina.pdf, p. 1"
 2027-06-24,holiday,Sant Joan 🔥,,,,
 2027-06-25,holiday,Lliure Disposició,,,,
 2027-07-07,school,Biblioteca 📚,,,,

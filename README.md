@@ -32,6 +32,7 @@ L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia labor
 | Newsletter Setembre             | Projecte d'Adaptació, tancaments i celebracions del mes.                               |
 | `OCTUBRE_2026.xlsx - P1-P2.pdf` | Menú de l'1 al 30 d'octubre del 2026.                                                  |
 | `TARDOR_GIRAFFES_2026_BRUC.pdf` | Projecte de la Tardor (octubre): activitats, aniversaris, llibre i cançó del projecte. |
+| `Material_piscina.pdf`          | Material per portar els dies de piscina.                                               |
 | Calendari escolar               | Festius, dies de lliure disposició, casals, piscina, tallers i biblioteca.             |
 
 El calendari del curs hi és sencer, del 7 de setembre del 2026 al 30 de juliol del 2027:
@@ -57,7 +58,7 @@ Rutina setmanal dels Giraffes (`HORARI_I2_ok_.pdf`):
 
 A l'octubre, l'1 i el 2 no surten al document de la Tardor (comença el dia 5) i s'omplen amb la rutina setmanal. La cançó del projecte (_La Castanyera_) s'enllaça als dijous de música amb la llista de reproducció de la música del projecte, i el llibre (_La tardor de l'arbre rondinaire_) als divendres de conta contes.
 
-La piscina no consta als dilluns de setembre: el calendari escolar marca l'inici de la piscina a l'octubre, i el setembre és el mes d'adaptació. Tampoc no es dedueixen materials de la piscina; `Supplies` queda buit mentre l'escola no els indiqui per escrit.
+La piscina no consta als dilluns de setembre: el calendari escolar marca l'inici de la piscina a l'octubre, i el setembre és el mes d'adaptació. Els materials de la piscina surten de `Material_piscina.pdf` i s'assignen a cada dilluns de piscina amb escola oberta, del 5 d'octubre del 2026 al 14 de juny del 2027; els dilluns festius, de lliure disposició o de casal no en porten.
 
 ## Executar-ho en local
 
