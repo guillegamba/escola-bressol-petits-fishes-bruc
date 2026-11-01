@@ -265,9 +265,19 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
       .evaluate((el) => getComputedStyle(el).animationName),
     "sporty-settle",
   );
-  assert.equal(await page.locator(".mascot-sporty .mascot-idle").evaluate(el => getComputedStyle(el).animationIterationCount), "infinite");
+  assert.equal(
+    await page
+      .locator(".mascot-sporty .mascot-idle")
+      .evaluate((el) => getComputedStyle(el).animationIterationCount),
+    "infinite",
+  );
   await page.emulateMedia({ reducedMotion: "reduce" });
-  assert.equal(await page.locator(".mascot-sporty .mascot-idle").evaluate(el => getComputedStyle(el).animationName), "none");
+  assert.equal(
+    await page
+      .locator(".mascot-sporty .mascot-idle")
+      .evaluate((el) => getComputedStyle(el).animationName),
+    "none",
+  );
   assert.equal(
     await page
       .locator(".mascot-sporty .mascot-body")
