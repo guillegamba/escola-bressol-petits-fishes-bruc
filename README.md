@@ -21,7 +21,7 @@ Diari no oficial de l'**Escola Bressol Petits Giraffes (Bruc)**, el grup que a l
 
 L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia laborable sense fila es mostra com a **programació pendent**, mai com a festiu. Els dissabtes i diumenges sense fila es mostren com a cap de setmana; una fila explícita té prioritat i els torna a fer visibles i triables. Les fletxes del diari salten el cap de setmana: després de divendres ve dilluns.
 
-**El setembre i l'octubre del 2026 estan publicats sencers.** A partir de novembre el CSV només conté el calendari del curs (festius, dies de lliure disposició, casals, piscina i tallers): els dies hi surten amb el seu rètol, però amb el menú i les activitats pendents. Un mes es considera publicat només quan algun dia té menú o activitats, de manera que l'avís «Encara no tenim la programació de…» i el botó «Últim dia publicat» ignoren les files de calendari.
+**El setembre, l'octubre i el novembre del 2026 estan publicats sencers.** A partir de desembre el CSV només conté el calendari del curs (festius, dies de lliure disposició, casals, piscina i tallers): els dies hi surten amb el seu rètol, però amb el menú i les activitats pendents. Un mes es considera publicat només quan algun dia té menú o activitats, de manera que l'avís «Encara no tenim la programació de…» i el botó «Últim dia publicat» ignoren les files de calendari.
 
 ### Curs 2026-2027
 
@@ -32,6 +32,8 @@ L'app s'obre a **la data real**, encara que el mes no tingui dades. Un dia labor
 | Newsletter Setembre             | Projecte d'Adaptació, tancaments i celebracions del mes.                               |
 | `OCTUBRE_2026.xlsx - P1-P2.pdf` | Menú de l'1 al 30 d'octubre del 2026.                                                  |
 | `TARDOR_GIRAFFES_2026_BRUC.pdf` | Projecte de la Tardor (octubre): activitats, aniversaris, llibre i cançó del projecte. |
+| `NOVEMBRE_2026.pdf`             | Menú del 2 al 30 de novembre del 2026.                                                 |
+| `GIRAFFES_BRUC_NOVEMBRE.pdf`    | Projecte Art i moviment (novembre): activitats, aniversaris, llibre i cançó.           |
 | `Material_piscina.pdf`          | Material per portar els dies de piscina.                                               |
 | Calendari escolar               | Festius, dies de lliure disposició, casals, piscina, tallers i biblioteca.             |
 
@@ -57,6 +59,8 @@ Rutina setmanal dels Giraffes (`HORARI_I2_ok_.pdf`):
 | Divendres | Activitat del projecte | Conta contes        |
 
 A l'octubre, l'1 i el 2 no surten al document de la Tardor (comença el dia 5) i s'omplen amb la rutina setmanal. La cançó del projecte (_La Castanyera_) s'enllaça als dijous de música amb la llista de reproducció de la música del projecte, i el llibre (_La tardor de l'arbre rondinaire_) als divendres de conta contes.
+
+Al novembre, el projecte és _Art i moviment_. La cançó (_Be an artist_) s'enllaça als dijous de música i el llibre (_I am an artist_) surt als divendres de conta contes. El dimecres 4 hi ha biblioteca en lloc de psicomotricitat.
 
 La piscina no consta als dilluns de setembre: el calendari escolar marca l'inici de la piscina a l'octubre, i el setembre és el mes d'adaptació. Els materials de la piscina surten de `Material_piscina.pdf` i s'assignen a cada dilluns de piscina amb escola oberta, del 5 d'octubre del 2026 al 14 de juny del 2027; els dilluns festius, de lliure disposició o de casal no en porten.
 

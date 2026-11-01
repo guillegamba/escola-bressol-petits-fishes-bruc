@@ -124,30 +124,32 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     await page.locator("#date-title").textContent(),
     /18 de setembre/,
   );
-  // November holds course-calendar rows (a closure, a free-disposition day, the
+  // December holds course-calendar rows (closures, a free-disposition day, the
   // pool kit on Mondays) but no programme, so the month still reads as pending.
-  await page.goto(base + "?date=2026-11-10&view=week");
+  await page.goto(base + "?date=2026-12-15&view=week");
   await page.locator("#schedule-status .schedule-notice").waitFor();
   assert.match(
     await page.locator("#schedule-status").textContent(),
-    /novembre del 2026/,
+    /desembre del 2026/,
   );
   assert.equal(
     await page
       .locator(".week-row")
       .filter({ hasText: "Programació pendent" })
       .count(),
-    4,
+    3,
   );
   await page.locator('[data-action="archive"]').click();
   assert.match(
     await page.locator("#date-title").textContent(),
-    /29 d’octubre/,
+    /30 de novembre/,
   );
   assert.match(
     await page.locator(".menu-card").textContent(),
-    /Delícies de pollastre/,
+    /Bolonyesa de vedella/,
   );
+  await page.goto(base + "?date=2026-11-27");
+  await page.locator(".menu-card").waitFor();
   assert.equal(await page.locator("#bag-content").isVisible(), false);
   assert.equal(await page.locator("#checklist").textContent(), "");
   await page.evaluate(() =>
@@ -205,6 +207,12 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
   assert.match(
     await page.locator(".song-link").first().getAttribute("href"),
     /list=PLMMEEBLxpWRvd9OllWlKXk20wEjbYsLxD/,
+  );
+  await page.goto(base + "?date=2026-11-12");
+  await page.locator(".menu-card").waitFor();
+  assert.match(
+    await page.locator(".song-link").first().getAttribute("href"),
+    /x03DSOjgJ9g/,
   );
   await page.goto(base + "?date=2026-07-24");
   await page.locator(".menu-card").waitFor();
@@ -281,7 +289,7 @@ const base = process.env.BASE_URL || "http://127.0.0.1:8000/";
     .waitFor();
   assert.equal(errors.length, 0, JSON.stringify(errors));
   console.log(
-    "PASS: current date; published September and October; pending month with calendar-only rows; Mon-Fri week view; month view keyboard and inert weekends; weekend-skipping day arrows; archive; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
+    "PASS: current date; published September, October and November; pending month with calendar-only rows; Mon-Fri week view; month view keyboard and inert weekends; weekend-skipping day arrows; archive; source-backed supplies, empty bag, date-scoped persistence; song links; five viewport widths; malformed CSV error.",
   );
   await context.close();
   // Real service worker: cache installation, immediate fresh data, offline shared URLs.

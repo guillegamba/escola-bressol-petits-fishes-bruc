@@ -39,6 +39,7 @@
     "2026-05": "https://www.youtube.com/watch?v=RuqvGiZi0qg",
     "2026-10":
       "https://www.youtube.com/playlist?list=PLMMEEBLxpWRvd9OllWlKXk20wEjbYsLxD",
+    "2026-11": "https://www.youtube.com/watch?v=x03DSOjgJ9g",
   };
   const initialParams = new URLSearchParams(location.search);
   const state = {
